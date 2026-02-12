@@ -1,0 +1,52 @@
+@font-face {
+    font-family: 'Pixels';
+    src: url('../fonts/Retro\ Gaming.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Animated';
+    src: url('../fonts/Oups.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'California';
+    src: url('../fonts/California.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+:root {
+    --color-principal: #02b3d8;
+    --color-secundario-claro: #02b3d8;
+    --color-secundario-oscuro: #02385d;
+    --fuente-principal: 'Pixels', cursive;
+    --fuente-animated: 'Animated', cursive;
+    --fuente-california: 'California', cursive;
+}
+
+* {
+    font-family: var(--fuente-principal);
+}
+
+body {
+    background-color: black;
+    color: white;
+}
+
+header {
+    margin: 20px;
+}
+
+header h1 {
+    color: var(--color-principal);
+}
+
+header .logo {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
