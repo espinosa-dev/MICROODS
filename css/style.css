@@ -30,15 +30,50 @@
 
 * {
     font-family: var(--fuente-principal);
+    margin: 0;
+    padding: 0;
 }
 
 body {
     background-color: black;
     color: white;
+    padding-top: 100px;
+}
+
+@keyframes dotsAnimation {
+    0% {
+        transform: translate(0, 0);
+    }
+
+    100% {
+        transform: translate(-50%, -50%);
+    }
 }
 
 header {
-    margin: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    /* Added horizontal padding */
+    border-bottom: 2px solid var(--color-principal);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    background-color: black;
+    /* Default background */
+    box-sizing: border-box;
+    /* Ensure padding includes in width */
+    transition: background-color 0.3s ease, opacity 0.3s ease;
+}
+
+header.down {
+    background-color: rgba(0, 0, 0, 0.8);
+    /* Transparent background on scroll */
+    border-bottom: 1px solid var(--color-principal);
+    /* Optional: thinner border */
 }
 
 header h1 {
@@ -49,4 +84,20 @@ header .logo {
     display: flex;
     align-items: center;
     gap: 15px;
+}
+
+nav li {
+    list-style: none;
+    text-decoration: none;
+    display: inline;
+    margin: 0 15px;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+nav li a {
+    color: var(--color-principal);
+    text-decoration: none;
 }
