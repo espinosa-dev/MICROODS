@@ -5,61 +5,26 @@
     font-style: normal;
 }
 
-@font-face {
-    font-family: 'Animated';
-    src: url('../fonts/Oups.otf') format('opentype');
-    font-weight: normal;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'California';
-    src: url('../fonts/California.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-}
-
 :root {
     --color-principal: #02b3d8;
-
-    /* PALETA MONOCROMÁTICA (Variaciones del principal) */
     --color-principal-darker: #014756;
-    /* Textos resaltados o fondos muy oscuros */
     --color-principal-dark: #017d97;
-    /* Estados hover en botones o bordes */
     --color-principal-light: #69d4ee;
-    /* Fondos secundarios o acentos suaves */
     --color-principal-lighter: #d0f2fa;
-    /* Fondos de tarjetas o secciones claras */
-
-    /* PALETA COMPLEMENTARIA (Alto contraste / CTAs) */
     --color-accent-danger: #d82702;
-    /* Botones de alerta, errores o "Comprar" */
     --color-accent-warm: #ff6845;
-    /* Detalles cálidos y notificaciones */
-
-    /* PALETA ANÁLOGA (Armonía / Estados) */
     --color-accent-success: #02d884;
-    /* Mensajes de éxito, confirmaciones */
     --color-accent-info: #0256d8;
-    /* Enlaces, información, profundidad */
-
-    /* COLORES NEUTROS (Para la interfaz / UI) */
     --color-bg-main: #f2f8f9;
-    /* Color de fondo principal de la web */
     --color-border-light: #dce8eb;
-    /* Separadores, líneas y bordes sutiles */
     --color-text-muted: #6b8388;
-    /* Textos secundarios, placeholders o iconos */
     --color-text-main: #102428;
-
-
-
     --color-secundario-claro: #43e0ff;
     --color-secundario-oscuro: #02385d;
     --fuente-principal: 'Pixels', cursive;
-    --fuente-animated: 'Animated', cursive;
-    --fuente-california: 'California', cursive;
+
+    scroll-behavior: smooth;
+    scrollbar-color: var(--color-principal-light) var(--color-principal-darker);
 }
 
 * {
@@ -72,6 +37,9 @@ body {
     background-color: black;
     color: white;
     padding-top: 100px;
+    cursor: cell;
+    overflow-x: hidden;
+    
 }
 
 @keyframes dotsAnimation {
@@ -151,11 +119,20 @@ article.diary {
     box-shadow: 0px 0px 30px var(--color-principal-lighter);
 }
 
+article.diary h3 {
+    margin-top: 0px;
+}
+
+article.diary p {
+    flex-grow: 1;
+}
+
 article.diary button {
+    margin-top: 20px;
     padding: 10px 20px;
     border: 2px solid var(--color-principal-dark);
     border-radius: 10px;
-    cursor: crosshair;
+    cursor: pointer;
     transition: all 0.3s ease-out;
 }
 
@@ -163,6 +140,7 @@ article.diary button:hover {
     background-color: var(--color-principal-darker);
     color: var(--color-bg-main);
     border: 2px solid var(--color-principal-lighter);
+    cursor: cell;
 }
 
 section.diaries {
@@ -183,9 +161,54 @@ section.diaries h2 {
 
 section.diaries div.grid {
     gap: 20px;
-    grid-template-columns: repeat(2, minmax(100px, 2fr));
+    grid-template-columns: repeat(2, minmax(100px, 1fr));
+    align-items: stretch;
 
 }
+
+
+span.frontend {
+    color: rgb(25, 179, 25);
+    font-weight: bold;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+span.game {
+    color: rgb(228, 27, 27);
+    font-weight: bold;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+span.docs {
+    color: rgb(135, 25, 179);
+    font-weight: bold;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+span.bug {
+    color: rgb(236, 28, 255);
+    font-weight: bold;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+span.quality-increase {
+    color: rgb(0, 153, 255);
+    font-weight: bold;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+span.testing {
+    color: rgb(85, 60, 7);
+    font-weight: bold;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+span.planning {
+    color: rgb(255, 166, 0);
+    font-weight: bold;
+    font-family: 'Courier New', Courier, monospace;
+}
+
 
 section {
     margin: 2rem;
@@ -253,7 +276,6 @@ section#intro button {
     border: 2px solid var(--color-principal-dark);
     border-radius: 8px;
     padding: 1rem 2rem;
-    cursor: url('../img/logo.png'), auto;
     transition: all 0.3s ease;
 }
 
@@ -261,6 +283,7 @@ section#intro button:hover {
     background-color: var(--color-principal-dark);
     color: var(--color-bg-main);
     border: 2px solid var(--color-principal-lighter);
+    cursor: cell;
 }
 
 .more-diaries {
@@ -277,7 +300,7 @@ section#intro button:hover {
     font-size: 18px;
     border: 3px solid var(--color-principal-dark);
     border-radius: 10px;
-    cursor: crosshair;
+    cursor: pointer;
     transition: all 0.3s ease-out;
 }
 
@@ -285,11 +308,12 @@ section#intro button:hover {
     background-color: var(--color-principal-darker);
     color: var(--color-bg-main);
     border: 3px solid var(--color-principal-lighter);
+    cursor: cell;
 }
 
 .grid {
     display: grid;
-    grid-template-columns: repeat(4, minmax(200px, 1fr));
+    grid-template-columns: repeat(3, minmax(200px, 1fr));
     grid-column-gap: 0px;
     grid-row-gap: 0px;
     gap: 5rem;
@@ -317,7 +341,7 @@ section#intro button:hover {
 .box h3 {
     color: var(--color-secundario-claro);
     margin-bottom: 1rem;
-    font-family: var(--fuente-california);
+    font-family: var(--fuente-principal);
 }
 
 .box a {
@@ -333,17 +357,19 @@ section#intro button:hover {
     padding: 10px 20px;
     border-radius: 5px;
     font-size: 15px;
-    cursor: crosshair;
+    cursor: pointer;
     transition: background-color 0.5s;
 }
 
 .box button:hover {
     background-color: var(--color-secundario-oscuro);
     color: white;
+    cursor: cell;
 }
 
 .box button:active {
     border-bottom: 4px inset var(--color-secundario-claro);
+    cursor: cell;
 }
 
 footer {
@@ -393,6 +419,6 @@ footer .links li {
 }
 
 .author {
-    font-family: var(--fuente-california);
+    font-family: 'Comic Sans MS', cursive;
     font-size: 20px;
 }
