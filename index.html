@@ -12,10 +12,12 @@
 
 <body>
     <header>
-        <div class="logo">
-            <img src="./img/logo.png" alt="Logo" width="50px">
-            <h1>MICRO<span style="color: var(--color-principal-lighter)">ODS</span></h1>
-        </div>
+        <a href="./index.html">
+            <div class="logo">
+                <img src="./img/logo.png" alt="Logo" width="50px">
+                <h1>MICRO<span style="color: var(--color-principal-lighter)">ODS</span></h1>
+            </div>
+        </a>
         <nav>
             <li><a href="./pages/microgames/juego.html">Juegos</a></li>
             <li><a href="./pages/marcador.html">Marcador</a></li>
@@ -25,51 +27,99 @@
     <main>
         <section id="intro">
             <h2 class="titulo">INTRODUCCIÓN</h2>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum quis, eum illum voluptate optio
-                dolor recusandae deserunt quidem laborum magni sunt nesciunt asperiores accusamus repellat ea
-                aut voluptatem modi repellendus!</p>
-            <a href="./pages/juegos.html"><button>JUEGA YA!</button></a>
-            <button id="testBtn">Guardar prueba</button>
+            <p>Pon a prueba tus reflejos mientras contribuyes a los Objetivos de Desarrollo Sostenible en cada
+                microjuego.</p>
+            <a href="./pages/microgames/juego.html"><button>JUEGA YA!</button></a>
         </section>
-        <section>
+        <section id="design">
             <h2 class="titulo">DOCUMENTO DE DISEÑO</h2>
-            <div class="box">
-                <h3></h3>
-                <p></p>
+            <div class="grid">
+                <div class="box">
+                    <h3>Concepto y Filosofía</h3>
+                    <p>
+                        MICROODS es una página web de microjuegos arcade inspirada en retos rápidos, cuyo objetivo es
+                        concienciar sobre los Objetivos de Desarrollo Sostenible (ODS) mediante mecánicas dinámicas y
+                        directas.
+                    </p>
+                    <ul>
+                        <li>Microjuegos rápidos (5-8 segundos).</li>
+                        <li>Aprendizaje implícito mediante acción.</li>
+                        <li>Progresión infinita con dificultad creciente.</li>
+                        <li>Competición global mediante leaderboard online.</li>
+                        <li>Compatible con GitHub Pages.</li>
+                    </ul>
+                </div>
+                <div class="box">
+                    <h3>Mecánicas Generales</h3>
+                    <ul>
+                        <li>Bucle infinito de microjuegos.</li>
+                        <li>Cada microjuego dura entre 5 y 8 segundos.</li>
+                        <li>El jugador debe completar el objetivo antes de que termine el tiempo.</li>
+                        <li>Si gana, suma 1 punto.</li>
+                        <li>Si pierde, pierde 1 vida.</li>
+                    </ul>
+                </div>
+                <div class="box">
+                    <h3>Sistema de Vidas y Dificultad</h3>
+                    <p>El jugador dispone de 4 vidas iniciales.</p>
+                    <ul>
+                        <li>Fallar un microjuego resta 1 vida.</li>
+                        <li>Al llegar a 0 vidas se muestra la pantalla de Game Over.</li>
+                        <li>Cada 5 puntos aumenta la dificultad.</li>
+                    </ul>
+
+                    <p><strong>Niveles de dificultad:</strong></p>
+                    <ul>
+                        <li><strong>0-4 puntos:</strong> Velocidad normal, pocos objetos.</li>
+                        <li><strong>5-9 puntos:</strong> Más objetos y menos tiempo.</li>
+                        <li><strong>10-14 puntos:</strong> Más velocidad y distracciones.</li>
+                        <li><strong>15+ puntos:</strong> Velocidad alta y mayor presión.</li>
+                    </ul>
+                </div>
+                <div class="box">
+                    <h3>Leaderboard Global</h3>
+                    <p>
+                        El juego incluye un sistema de clasificación global mediante Firebase Firestore.
+                    </p>
+                    <ul>
+                        <li>Se guarda nombre del jugador.</li>
+                        <li>Se guarda puntuación y nivel alcanzado.</li>
+                        <li>Ranking ordenado por puntuación descendente.</li>
+                        <li>Visible para todos los jugadores.</li>
+                    </ul>
+                </div>
             </div>
-            <div class="box">
-                <h3></h3>
-                <p></p>
-            </div>
-            <div class="box">
-                <h3></h3>
-                <p></p>
-            </div>
-            <div class="box">
-                <h3></h3>
-                <p></p>
-            </div>
-            <a href=""><button>AQUÍ</button></a>
         </section>
         <section class="diaries">
             <h2 class="titulo">DIARIO DE DESARROLLO</h2>
             <div class="grid">
                 <article class="diary">
                     <h3>DIA #1</h3>
-                    <p><span style="font-size: 22px; margin-top: -10px;">Setup</span><br>He analizado el proyecto, creado el repositorio y proyecto en Github Proyects.</p>
-                    <p>Se han realizado las siguientes tareas: <br><span class="planning">[Planning]</span> - Definir alcance del proyecto <br>
-                    <span class="planning">[Planning]</span> - Seleccionar ODS a trabajar <br>
-                    <span class="planning">[Planning]</span> - Diseñar mecánicas de los microjuegos<br>
-                    <span class="planning">[Planning]</span> - Crear estructura de carpetas del proyecto<br>
-                    <span class="frontend">[Front-End]</span> - Crear HTML Base (index.html) <br>
-                    ...</p>   
+                    <p><span style="font-size: 22px; margin-top: -10px;">Setup</span><br>He analizado el proyecto,
+                        creado el repositorio y proyecto en Github Proyects.</p>
+                    <p>Se han realizado las siguientes tareas: <br><span class="planning">[Planning]</span> - Definir
+                        alcance del proyecto <br>
+                        <span class="planning">[Planning]</span> - Seleccionar ODS a trabajar <br>
+                        <span class="planning">[Planning]</span> - Diseñar mecánicas de los microjuegos<br>
+                        <span class="planning">[Planning]</span> - Crear estructura de carpetas del proyecto<br>
+                        <span class="frontend">[Front-End]</span> - Crear HTML Base (index.html) <br>
+                        ...
+                    </p>
                     <a href="./pages/diary/day1.html"><button>Ver día completo</button></a>
                 </article>
                 <article class="diary">
                     <h3>DIA #2</h3>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod praesentium provident aspernatur
-                        quae, placeat sunt blanditiis natus deleniti quos id, similique suscipit cupiditate voluptate
-                        adipisci impedit doloremque necessitatibus incidunt nisi.</p>
+                    <p><span style="font-size: 22px; margin-top: -10px;">ODS y Firebase</span><br>He realizado los micro
+                        juegos con cierta ayuda de IA para que realice la parte lógica de los juegos en código, pero
+                        pasandole al detalle los requisitos necesarios y como debe actuar cada elemento.</p>
+                    <p>Se han realizado las siguientes tareas: <br><span class="frontend">[Front-End]</span> - Pantalla
+                        de Juego HTML & CSS<br>
+                        <span class="game">[Game]</span> - Diseñar sistema global de puntuación<br>
+                        <span class="game">[Game]</span> - ECO-01 – Diseñar mecánica Eco Run<br>
+                        <span class="game">[Game]</span> - ECO-02 – Definir sistema de aparición escalable<br>
+                        <span class="game">[Game]</span> - ECO-03 – Definir sistema de derrota<br>
+                        ...
+                    </p>
                     <a href="./pages/diary/day2.html"><button>Ver día completo</button></a>
                 </article>
                 <article class="diary">
@@ -143,12 +193,13 @@
         <div class="grid">
             <div class="logo">
                 <img src="./img/logo.png" alt="Logo" width="50px">
-                <p>MICRO<span style="color: var(--color-principal)">ODS</span> <br> <span class="author">Álvaro Espinosa Montesinos</span></p>
+                <p>MICRO<span style="color: var(--color-principal)">ODS</span> <br> <span class="author">Álvaro Espinosa
+                        Montesinos</span></p>
             </div>
             <div class="links">
                 <ul>
-                    <li><a href="">Proyecto GitHub</a></li>
-                    <li><a href="">Repositorio</a></li>
+                    <li><a href="https://github.com/users/espinosa-dev/projects/5">Proyecto GitHub</a></li>
+                    <li><a href="https://github.com/espinosa-dev/MICROODS">Repositorio</a></li>
                 </ul>
                 <ul>
                     <li><a href="./pages/sobre-nosotros.html">Sobre Nosotros</a></li>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../../css/games.css">
+    <link rel="shortcut icon" href="../../img/logo.png" type="image/x-icon">
+</head>
+<body>
+    <div class="arcade-cabinet">
+        <header class="arcade-header">
+            <div class="marquee">
+                <span class="bulb"></span>
+                <div class="title-container">
+                    <img src="../../img/logo.png" alt="Logo" class="arcade-logo">
+                    <h1>MICRO<span class="neon-text">ODS</span></h1>
+                </div>
+                <span class="bulb"></span>
+            </div>
+        </header>
+        
+        <main class="arcade-body">
+            <div class="screen-bezel">
+                <div class="game-info-bar">
+                    <!-- HUD will be injected here -->
+                </div>
+                <div class="ventana crt-effect">
+                    <!-- Game Content via JS -->
+                </div>
+                <div class="timer-container-arcade">
+                     <div id="gameTimerBar" class="timer-bar"></div>
+                </div>
+            </div>
+            <div class="arcade-controls-deco">
+                <div class="joystick"></div>
+                <div class="buttons">
+                    <div class="btn-deco red"></div>
+                    <div class="btn-deco blue"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script type="module">
+        import { GameManager } from '../../js/game-manager.js';
+        
+        window.onerror = function(message, source, lineno, colno, error) {
+            const errorDiv = document.createElement('div');
+            errorDiv.style.color = 'red';
+            errorDiv.style.background = 'white';
+            errorDiv.style.padding = '20px';
+            errorDiv.style.border = '2px solid red';
+            errorDiv.style.position = 'fixed';
+            errorDiv.style.top = '10px';
+            errorDiv.style.left = '10px';
+            errorDiv.style.zIndex = '9999';
+            errorDiv.innerHTML = `<h3>Error Detectado:</h3><p>${message}</p><p>${source}:${lineno}</p>`;
+            document.body.appendChild(errorDiv);
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            try {
+                const gameManager = new GameManager();
+                gameManager.init();
+                window.gameManager = gameManager; // Debug
+                console.log("Game Manager initialized");
+            } catch (e) {
+                console.error("Initialization error:", e);
+                const ventana = document.querySelector('.ventana');
+                if(ventana) ventana.innerHTML = `<p style="color:red; padding:20px;">Error al iniciar el juego: ${e.message}</p>`;
+            }
+        });
+    </script>
+</body>
+</html>
+
+
