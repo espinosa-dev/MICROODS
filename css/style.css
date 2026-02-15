@@ -42,16 +42,6 @@ body {
     
 }
 
-@keyframes dotsAnimation {
-    0% {
-        transform: translate(0, 0);
-    }
-
-    100% {
-        transform: translate(-50%, -50%);
-    }
-}
-
 header {
     display: flex;
     justify-content: space-between;
@@ -77,6 +67,10 @@ header h1 {
     color: var(--color-principal);
 }
 
+header a {
+    text-decoration: none;
+}
+
 
 header .logo {
     display: flex;
@@ -100,6 +94,17 @@ nav li a {
     text-decoration: none;
 }
 
+nav li a:hover {
+    color: var(--color-principal-lighter);
+    cursor: cell;
+}
+
+section .titulo {
+    text-align: center;
+    text-shadow: 0px 0px 20px var(--color-principal-light);
+    padding-bottom: 25px;
+    font-size: 2.2rem;
+}
 
 article {
     display: flex;
@@ -155,8 +160,6 @@ section.diaries {
 
 section.diaries h2 {
     color: var(--color-principal-light);
-    text-align: center;
-    text-shadow: 0px 0px 20px var(--color-principal-light);
 }
 
 section.diaries div.grid {
@@ -218,7 +221,8 @@ section {
 section#intro {
     position: relative;
     background-image: url('../img/banner2.jpg');
-    background-position: center;
+    background-position: bottom;
+    background-size: cover;
     text-align: center;
     margin: 0;
     margin-top: -40px;
@@ -228,6 +232,8 @@ section#intro {
     border-radius: 8px;
     z-index: 1;
 }
+
+
 
 section#intro::before {
     content: '';
@@ -257,6 +263,7 @@ section#intro h2 {
     font-size: 4rem;
     margin-bottom: 1rem;
     position: relative;
+    text-shadow: 0px 0px 20px var(--color-principal-darker);
     z-index: 3;
 }
 
@@ -264,6 +271,7 @@ section#intro p {
     font-size: 1.2rem;
     margin-bottom: 1rem;
     position: relative;
+    text-shadow: 0px 0px 20px var(--color-principal-darker);
     z-index: 3;
 }
 
@@ -285,6 +293,19 @@ section#intro button:hover {
     border: 2px solid var(--color-principal-lighter);
     cursor: cell;
 }
+
+section#design {
+    margin-left: 600px;
+    margin-right: 600px;
+}
+
+section#design .grid {
+    grid-template-columns: repeat(1, minmax(250px, 1fr));
+    gap: 2rem;
+}
+
+
+
 
 .more-diaries {
     display: flex;
