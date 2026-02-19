@@ -150,10 +150,7 @@ export class GameManager {
     handleGameWin() {
         this.score++;
 
-        this.currentGameIndex++;
-        if (this.currentGameIndex >= this.gameSequence.length) {
-            this.currentGameIndex = 0;
-        }
+        this.currentGameIndex = Math.floor(Math.random() * this.gameSequence.length);
 
         if (this.score % 5 === 0) {
             this.level++;

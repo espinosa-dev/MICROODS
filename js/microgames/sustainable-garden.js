@@ -3,7 +3,7 @@ import { BaseGame } from './base-game.js';
 export class SustainableGardenGame extends BaseGame {
     constructor(container, level, onWin, onLose) {
         super(container, level, onWin, onLose);
-        this.targetScore = 5;
+        this.targetScore = level >= 3 ? 10 : 5;
         this.plants = [];
         this.tools = ['water', 'sun', 'fertilizer'];
         this.selectedTool = 'water';
