@@ -127,6 +127,10 @@ export class GameManager {
                     const { SaveEnergyGame } = await import('./microgames/save-energy.js');
                     GameClass = SaveEnergyGame;
                     break;
+                case 'aula-equipada':
+                    const { AulaEquipadaGame } = await import('./microgames/aula-equipada.js');
+                    GameClass = AulaEquipadaGame;
+                    break;
             }
         } catch (e) {
             console.error("Error loading game:", e);
@@ -152,7 +156,7 @@ export class GameManager {
 
         this.currentGameIndex = Math.floor(Math.random() * this.gameSequence.length);
 
-        if (this.score % 5 === 0) {
+        if (this.score % 6 === 0) {
             this.level++;
         }
 
