@@ -3,17 +3,17 @@ import { BaseGame } from './base-game.js';
 export class SeaHookGame extends BaseGame {
     constructor(container, level, onWin, onLose) {
         super(container, level, onWin, onLose);
-        this.targetScore = 5;
+        this.targetScore = level >= 3 ? 10 : 5;
         this.catcherX = 50; // Percentage
         this.catcherWidth = 10; // Percentage
-        
+
         this.items = []; // {element, type, x, y, speed}
         this.fishCaught = 0;
         this.maxFishCaught = 3;
-        
+
         this.lastSpawn = 0;
         this.spawnRate = Math.max(500, 1500 - (level * 100));
-        
+
         this.boundMouseMove = this.handleInput.bind(this);
     }
 
@@ -49,17 +49,17 @@ export class SeaHookGame extends BaseGame {
 
     handleInput(e) {
         if (!this.isActive) return;
-        
+
         // Map mouse X to percentage relative to container
         const rect = this.container.getBoundingClientRect();
         let x = e.clientX - rect.left;
-        
+
         // Clamp
         if (x < 0) x = 0;
         if (x > rect.width) x = rect.width;
-        
+
         this.catcherX = (x / rect.width) * 100;
-        
+
         // Update visual
         this.catcherEl.style.left = `${this.catcherX}%`;
     }
@@ -78,20 +78,20 @@ export class SeaHookGame extends BaseGame {
         this.items.forEach((item, index) => {
             item.y += item.speed;
             item.element.style.top = `${item.y}%`;
-            
+
             // Check Collision with Catcher (Bottom ~90%)
             if (item.y > 85 && item.y < 95) {
                 // Check X overlap
                 // Item width is approx 5-8%
                 const itemX = item.x;
-                 // Catcher width is this.catcherWidth (centered)
-                 const catcherLeft = this.catcherX - (this.catcherWidth / 2);
-                 const catcherRight = this.catcherX + (this.catcherWidth / 2);
-                 
-                 if (itemX >= catcherLeft && itemX <= catcherRight) {
-                     this.handleCollision(item, index);
-                     return; 
-                 }
+                // Catcher width is this.catcherWidth (centered)
+                const catcherLeft = this.catcherX - (this.catcherWidth / 2);
+                const catcherRight = this.catcherX + (this.catcherWidth / 2);
+
+                if (itemX >= catcherLeft && itemX <= catcherRight) {
+                    this.handleCollision(item, index);
+                    return;
+                }
             }
 
             // Remove if off screen
@@ -107,13 +107,13 @@ export class SeaHookGame extends BaseGame {
         const el = document.createElement('div');
         el.className = 'sea-item-emoji';
         el.innerText = type === 'trash' ? this.getRandomTrash() : '🐟';
-        
+
         const x = Math.random() * 90 + 5; // 5% to 95%
         el.style.left = `${x}%`;
         el.style.top = '-10%';
-        
+
         this.container.appendChild(el);
-        
+
         this.items.push({
             element: el,
             type: type,
@@ -135,7 +135,7 @@ export class SeaHookGame extends BaseGame {
         if (item.type === 'trash') {
             this.score++;
             document.getElementById('trashScore').innerText = this.score;
-            
+
             // Visual feedback
             const feedback = document.createElement('div');
             feedback.innerText = '+1';
@@ -153,16 +153,16 @@ export class SeaHookGame extends BaseGame {
             // Caught a fish!
             this.fishCaught++;
             document.getElementById('fishScore').innerText = this.fishCaught;
-            
-             // Visual feedback
-             const feedback = document.createElement('div');
-             feedback.innerText = '❌';
-             feedback.style.position = 'absolute';
-             feedback.style.left = `${this.catcherX}%`;
-             feedback.style.bottom = '15%';
-             feedback.style.color = 'red';
-             feedback.style.animation = 'floatUp 0.5s forwards';
-             this.container.appendChild(feedback);
+
+            // Visual feedback
+            const feedback = document.createElement('div');
+            feedback.innerText = '❌';
+            feedback.style.position = 'absolute';
+            feedback.style.left = `${this.catcherX}%`;
+            feedback.style.bottom = '15%';
+            feedback.style.color = 'red';
+            feedback.style.animation = 'floatUp 0.5s forwards';
+            this.container.appendChild(feedback);
 
             if (this.fishCaught >= this.maxFishCaught) {
                 this.finish(false);

@@ -9,9 +9,9 @@ export class GameManager {
         this.gameContainer = document.querySelector('.ventana');
         this.currentMicrogame = null;
         this.isGameOver = false;
-        
+        this.previusGameIndex = 0
         // Game Rotation Logic
-        this.gameSequence = ['eco-run', 'sea-hook', 'sustainable-garden', 'recycle-sort', 'save-energy'];
+        this.gameSequence = ['eco-run', 'sea-hook', 'sustainable-garden', 'recycle-sort', 'save-energy', 'aula-equipada'];
         this.currentGameIndex = 0;
         
         // Bind methods
@@ -132,6 +132,10 @@ export class GameManager {
                     const { SaveEnergyGame } = await import('./microgames/save-energy.js');
                     GameClass = SaveEnergyGame;
                     break;
+                case 'aula-equipada':
+                    const { AulaEquipadaGame } = await import('./microgames/aula-equipada.js');
+                    GameClass = AulaEquipadaGame;
+                    break;
             }
         } catch (e) {
             console.error("Error loading game:", e);
@@ -154,17 +158,14 @@ export class GameManager {
 
     handleGameWin() {
         this.score++;
-        
-        // Rotate Game Index
-        this.currentGameIndex++;
-        if(this.currentGameIndex >= this.gameSequence.length) {
-            this.currentGameIndex = 0;
-            // Only increase level after completing a full rotation (optional) 
-            // OR increase every 5 points as per original spec?
-            // "Level sube cada 5 puntos".
-        }
-        
-        if(this.score % 5 === 0) {
+
+        this.previusGameIndex = this.currentGameIndex;
+
+        do {
+            this.currentGameIndex = Math.floor(Math.random() * this.gameSequence.length);
+        } while (this.currentGameIndex == this.previusGameIndex);
+
+        if (this.score % 6 === 0) {
             this.level++;
         }
 

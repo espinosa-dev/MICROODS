@@ -39,7 +39,7 @@ body {
     padding-top: 100px;
     cursor: cell;
     overflow-x: hidden;
-    
+
 }
 
 header {
@@ -154,8 +154,8 @@ section.diaries {
     justify-content: center;
     align-items: center;
     gap: 2rem;
-    margin-left: 250px;
-    margin-right: 250px;
+    margin-left: 10%;
+    margin-right: 10%;
 }
 
 section.diaries h2 {
@@ -167,6 +167,14 @@ section.diaries div.grid {
     grid-template-columns: repeat(2, minmax(100px, 1fr));
     align-items: stretch;
 
+}
+
+@media (max-width: 1300px) {
+    section.diaries div.grid {
+        gap: 20px;
+        grid-template-columns: repeat(1, minmax(100px, 2fr));
+        align-items: stretch;
+    }
 }
 
 
@@ -295,9 +303,11 @@ section#intro button:hover {
 }
 
 section#design {
-    margin-left: 600px;
-    margin-right: 600px;
+    margin-left: 25%;
+    margin-right: 25%;
 }
+
+
 
 section#design .grid {
     grid-template-columns: repeat(1, minmax(250px, 1fr));
@@ -351,8 +361,16 @@ section#design .grid {
     border: 2px solid var(--color-principal);
     border-radius: 8px;
     transition: all 0.3s ease;
-    margin: 10px;
+    margin: 1%;
     box-shadow: 0 0 10px var(--color-principal);
+}
+
+.box:nth-child(odd) {
+    background-color: #1a1a1a;
+}
+
+.box:nth-child(even) {
+    background-color: #444444;
 }
 
 .box:hover {
