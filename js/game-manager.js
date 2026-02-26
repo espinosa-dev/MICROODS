@@ -9,9 +9,9 @@ export class GameManager {
         this.gameContainer = document.querySelector('.ventana');
         this.currentMicrogame = null;
         this.isGameOver = false;
-
+        this.previusGameIndex = 0
         // Game Rotation Logic
-        this.gameSequence = ['eco-run', 'sea-hook', 'sustainable-garden', 'recycle-sort', 'save-energy'];
+        this.gameSequence = ['eco-run', 'sea-hook', 'sustainable-garden', 'recycle-sort', 'save-energy', 'aula-equipada'];
         this.currentGameIndex = 0;
 
         // Bind methods
@@ -154,7 +154,11 @@ export class GameManager {
     handleGameWin() {
         this.score++;
 
-        this.currentGameIndex = Math.floor(Math.random() * this.gameSequence.length);
+        this.previusGameIndex = this.currentGameIndex;
+
+        do {
+            this.currentGameIndex = Math.floor(Math.random() * this.gameSequence.length);
+        } while (this.currentGameIndex == this.previusGameIndex);
 
         if (this.score % 6 === 0) {
             this.level++;
