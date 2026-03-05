@@ -11,9 +11,9 @@ export class GameManager {
         this.isGameOver = false;
         this.previusGameIndex = 0
         // Game Rotation Logic
-        this.gameSequence = ['eco-run', 'sea-hook', 'sustainable-garden', 'recycle-sort', 'save-energy', 'aula-equipada'];
+        this.gameSequence = ['eco-run', 'sea-hook', 'sustainable-garden', 'recycle-sort', 'save-energy', 'aula-equipada', 'veredicto-justo'];
         this.currentGameIndex = 0;
-        
+
         // Bind methods
         this.handleGameWin = this.handleGameWin.bind(this);
         this.handleGameLoss = this.handleGameLoss.bind(this);
@@ -32,10 +32,10 @@ export class GameManager {
                 <button class="game-btn" id="startBtn">COMENZAR</button>
             </div>
         `;
-        
+
         document.getElementById('startBtn').addEventListener('click', () => {
             const input = document.getElementById('playerNameInput');
-            if(input.value.trim() !== "") {
+            if (input.value.trim() !== "") {
                 this.playerName = input.value.trim();
                 this.resetGlobalState();
                 this.startSequence();
@@ -57,10 +57,10 @@ export class GameManager {
     createHUD() {
         // Ensure HUD exists in the new bar
         const hudContainer = document.querySelector('.game-info-bar');
-        if(!hudContainer) return;
-        
+        if (!hudContainer) return;
+
         // Clear existing HUD if needs re-creation context
-        hudContainer.innerHTML = ''; 
+        hudContainer.innerHTML = '';
 
         const hud = document.createElement('div');
         hud.className = 'game-hud';
@@ -84,10 +84,10 @@ export class GameManager {
         const livesEl = document.getElementById('livesDisplay');
         const scoreEl = document.getElementById('scoreDisplay');
         const levelEl = document.getElementById('levelDisplay');
-        
-        if(livesEl) livesEl.textContent = this.lives;
-        if(scoreEl) scoreEl.textContent = this.score;
-        if(levelEl) levelEl.textContent = this.level;
+
+        if (livesEl) livesEl.textContent = this.lives;
+        if (scoreEl) scoreEl.textContent = this.score;
+        if (levelEl) levelEl.textContent = this.level;
     }
 
     startSequence() {
@@ -104,14 +104,14 @@ export class GameManager {
 
         // Determine which game to load
         const gameId = this.gameSequence[this.currentGameIndex];
-        
+
         // Show Transition/Briefing screen before game starts?
         // For now, prompt loading direct
-        
+
         let GameClass = null;
 
         try {
-            switch(gameId) {
+            switch (gameId) {
                 case 'eco-run':
                     const { EcoRunGame } = await import('./microgames/eco-run.js');
                     GameClass = EcoRunGame;
@@ -136,16 +136,20 @@ export class GameManager {
                     const { AulaEquipadaGame } = await import('./microgames/aula-equipada.js');
                     GameClass = AulaEquipadaGame;
                     break;
+                case 'veredicto-justo':
+                    const { VeredictoJustoGame } = await import('./microgames/veredicto-justo.js');
+                    GameClass = VeredictoJustoGame;
+                    break;
             }
         } catch (e) {
             console.error("Error loading game:", e);
             alert("Error cargando microjuego: " + gameId);
             return;
         }
-        
+
         this.gameContainer.innerHTML = '';
-        this.createHUD(); 
-        
+        this.createHUD();
+
         const gameLayer = document.createElement('div');
         gameLayer.className = 'game-layer';
         gameLayer.style.width = '100%';
@@ -165,19 +169,19 @@ export class GameManager {
             this.currentGameIndex = Math.floor(Math.random() * this.gameSequence.length);
         } while (this.currentGameIndex == this.previusGameIndex);
 
-        if (this.score % 6 === 0) {
+        if (this.score % 7 === 0) {
             this.level++;
         }
 
         this.updateHUD();
-        
+
         // Show Success Briefly
         const successMsg = document.createElement('div');
         successMsg.className = 'game-overlay';
         successMsg.style.background = 'rgba(0,100,0,0.8)';
         successMsg.innerHTML = '<h1 style="color:white">¡BIEN!</h1>';
         this.gameContainer.appendChild(successMsg);
-        
+
         setTimeout(() => {
             this.loadNextMicrogame();
         }, 1000);
@@ -186,7 +190,7 @@ export class GameManager {
     handleGameLoss() {
         this.lives--;
         this.updateHUD();
-        
+
         const failMsg = document.createElement('div');
         failMsg.className = 'game-overlay';
         failMsg.style.background = 'rgba(100,0,0,0.8)';
@@ -211,35 +215,35 @@ export class GameManager {
                 </div>
             </div>
         `;
-        
+
         try {
             await saveScore(this.playerName, this.score, this.level);
             const loadingEl = document.getElementById('leaderboardLoading');
-            if(loadingEl) loadingEl.textContent = "¡Puntuación Guardada!";
-            
+            if (loadingEl) loadingEl.textContent = "¡Puntuación Guardada!";
+
             // Show Leaderboard?
             const leaders = await getLeaderboard();
             let leaderHTML = '<ul style="text-align:left; font-size: 18px; list-style:none; padding:0; margin-top:20px;">';
             leaders.forEach((l, i) => {
-                if (i < 3){
-                    leaderHTML += `<li style="margin-bottom:5px;">${i+1}. ${l.name}: ${l.score}</li>`;
+                if (i < 3) {
+                    leaderHTML += `<li style="margin-bottom:5px;">${i + 1}. ${l.name}: ${l.score}</li>`;
                 }
             });
             leaderHTML += '</ul>';
-            
+
             const lbDiv = document.createElement('div');
             lbDiv.innerHTML = leaderHTML;
             const overlay = document.querySelector('.game-overlay');
-            if(overlay) overlay.appendChild(lbDiv);
-            
+            if (overlay) overlay.appendChild(lbDiv);
+
         } catch (e) {
             console.error(e);
             const loadingEl = document.getElementById('leaderboardLoading');
-            if(loadingEl) loadingEl.textContent = "Error al guardar (Firebase puede fallar en local).";
+            if (loadingEl) loadingEl.textContent = "Error al guardar (Firebase puede fallar en local).";
         }
-        
+
         const restartBtn = document.getElementById('restartBtn');
-        if(restartBtn) {
+        if (restartBtn) {
             restartBtn.style.display = 'inline-block';
             restartBtn.addEventListener('click', () => {
                 window.location.reload();
@@ -247,7 +251,7 @@ export class GameManager {
         }
 
         const homeBtn = document.getElementById('homeBtn');
-        if(homeBtn) {
+        if (homeBtn) {
             homeBtn.style.display = 'inline-block';
             homeBtn.addEventListener('click', () => {
                 window.location.href = '../../index.html';
@@ -255,7 +259,7 @@ export class GameManager {
         }
 
         const btnDisplay = document.getElementById('btnDisplay');
-        if(btnDisplay) {
+        if (btnDisplay) {
             btnDisplay.style.display = 'inline-block';
         }
     }
