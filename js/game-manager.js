@@ -11,7 +11,7 @@ export class GameManager {
         this.isGameOver = false;
         this.previusGameIndex = 0
         // Game Rotation Logic
-        this.gameSequence = ['eco-run', 'sea-hook', 'sustainable-garden', 'recycle-sort', 'save-energy', 'aula-equipada', 'veredicto-justo'];
+        this.gameSequence = ['movilidad-sostenible', 'eco-run', 'sea-hook', 'sustainable-garden', 'recycle-sort', 'save-energy', 'aula-equipada', 'veredicto-justo', 'movilidad-sostenible'];
         this.currentGameIndex = 0;
 
         // Bind methods
@@ -139,6 +139,10 @@ export class GameManager {
                 case 'veredicto-justo':
                     const { VeredictoJustoGame } = await import('./microgames/veredicto-justo.js');
                     GameClass = VeredictoJustoGame;
+                    break;
+                case 'movilidad-sostenible':
+                    const { MovilidadSostenibleGame } = await import('./microgames/movilidad-sostenible.js');
+                    GameClass = MovilidadSostenibleGame;
                     break;
             }
         } catch (e) {
