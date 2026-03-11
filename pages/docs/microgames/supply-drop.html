@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doc: Supply Drop</title>
+    <link rel="shortcut icon" href="../../../img/logo.png" type="image/x-icon">
+    <link rel="stylesheet" href="../../../css/style.css">
+    <style>
+        .docs-container { max-width: 1000px; margin: 40px auto; padding: 20px; background: rgba(255, 255, 255, 0.05); border-radius: 15px; backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .docs-section { margin-bottom: 40px; padding-bottom: 20px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+        .docs-section h2 { color: var(--color-principal-lighter); margin-bottom: 20px; font-size: 2em; }
+        .docs-section h3, .docs-section h4 { color: var(--color-principal); margin-top: 20px; margin-bottom: 10px; }
+        .docs-section p, .docs-section li { line-height: 1.6; margin-bottom: 10px; font-size: 1.1em; }
+        .docs-section ul { margin-left: 20px; margin-bottom: 20px; }
+        .code-block { background: #1e1e1e; color: #d4d4d4; padding: 15px; border-radius: 8px; font-family: monospace; overflow-x: auto; margin: 15px 0; border: 1px solid #333; }
+        .back-link { display: inline-block; padding: 10px 20px; background: var(--color-principal); color: white; text-decoration: none; border-radius: 5px; margin-bottom: 20px; font-weight: bold; }
+        .back-link:hover { background: var(--color-principal-lighter); }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="../../../index.html" style="text-decoration: none;">
+            <div class="logo"><img src="../../../img/logo.png" alt="Logo" width="50px"><h1>MICRO<span style="color: var(--color-principal-lighter)">ODS</span></h1></div>
+        </a>
+    </header>
+    <main>
+        <div class="docs-container">
+            <a href="../docs.html" class="back-link">← Volver al Índice</a>
+            <h1 style="text-align: center; font-size: 2.5em;">Supply Drop</h1>
+            <p style="text-align: center; color: #aaa;">Documentación Técnica</p>
+
+            <section class="docs-section">
+                <h2>1. Ficha Técnica</h2>
+                <ul>
+                    <li><strong>Nombre:</strong> Supply Drop</li>
+                    <li><strong>ODS:</strong> ODS 1 - Fin de la Pobreza</li>
+                    <li><strong>Objetivo:</strong> Mover un trampolín/paddle inferior de izquierda a derecha para rebotar suministros que caen del cielo y depositarlos en la zona correcta del refugio.</li>
+                </ul>
+            </section>
+
+            <section class="docs-section">
+                <h2>2. Mecánica y Flujo de Juego</h2>
+                <p>El juego es una amalgama inspirada en clásicos del "Paddle Ball/Breakout" o "Fireman Catching Jumpers".</p>
+                <ol>
+                    <li>Una pala fija en la línea base (Base Y) es guiada horizontalmente (Eje X) a instancias del movimiento del cursor en el contorno o mediante toques táctiles.</li>
+                    <li>Suministros asisten automáticamente en picado y en espiral por acción gravitatoria desde el "Top".</li>
+                    <li>Si la interpolación del área del suministro choca (intersecta) contra los píxeles de la pala, "rebota" y se asegura el progreso.</li>
+                    <li>Se descarta o fracasa si el paquete impacta la línea basal ignorando la paleta.</li>
+                </ol>
+            </section>
+
+            <section class="docs-section">
+                <h2>3. Lógica de Programación</h2>
+                <p>Es indispensable la programación gráfica para otorgar sensación de control. A diferencia de <code>Sea Hook</code>, que mueve el 100% de la entidad al target instantáneo, <em>Supply Drop</em> usa una función <strong>Lerp</strong> lineal.</p>
+
+                <h3>Movimiento Interpolado (Smooth Paddle LERP)</h3>
+                <div class="code-block">
+this.targetPaddleX = x; // Coord de Objetivo
+// Dentro del Bucle recursivo
+this.paddleX += (this.targetPaddleX - this.paddleX) * 0.2; 
+// 0.2 es el peso (Weight) del rozamiento inercial del carro.
+                </div>
+                <p>Al aplicar <code>this.paddleX</code> en la propiedad Top/Left con Frame Request, creamos una experiencia gomosa/elástica, emulando la inercia sin físicas estrafalarias Box2D completas.</p>
+
+                <h3>Sincronización de Spawn y Velocidad (Tuning)</h2>
+                <p>Los parámetros numéricos como la variable `speed` que afecta a <code>box.y += box.speed</code> fueron intensamente reducidos debido al feedback de Q&A (Testing iterativo) donde el juego se presentaba injugable a 1.5 interpolaciones. Se fijó un suelo de <code>0.3 + (this.level * 0.05)</code>.</p>
+            </section>
+
+            <section class="docs-section">
+                <h2>4. Sistema de Victoria/Derrota</h2>
+                <p><strong>Victoria:</strong> Sumar y conseguir el <code>this.targetBoxes</code> meta antes del Timeout.</p>
+                <p><strong>Derrota:</strong> Dejar caer al sumidero/inframundo (sobrepasar límite 100% Y Bottom Boundary) la cantidad suficiente de drops.</p>
+            </section>
+
+            <section class="docs-section">
+                <h2>5. Consideraciones de Game Design ODS</h2>
+                <p>La abstracción lograda no rebota el fardo hacia arriba como en Breakout (mecánicamente impreciso), sino que interceptar es equiparable a una red amortiguada; de manera que visualmente represente la recolección, borrando el suministro del DOM exitosamente.</p>
+            </section>
+        </div>
+    </main>
+    <footer>
+        <div class="grid"><div class="logo"><img src="../../../img/logo.png" width="50px"><p>MICRO<span style="color: var(--color-principal)">ODS</span><br></p></div></div>
+    </footer>
+</body>
+</html>
