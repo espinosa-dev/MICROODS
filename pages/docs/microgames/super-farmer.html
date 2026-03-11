@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doc: Super Farmer</title>
+    <link rel="shortcut icon" href="../../../img/logo.png" type="image/x-icon">
+    <link rel="stylesheet" href="../../../css/style.css">
+    <style>
+        .docs-container { max-width: 1000px; margin: 40px auto; padding: 20px; background: rgba(255, 255, 255, 0.05); border-radius: 15px; backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .docs-section { margin-bottom: 40px; padding-bottom: 20px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+        .docs-section h2 { color: var(--color-principal-lighter); margin-bottom: 20px; font-size: 2em; }
+        .docs-section h3, .docs-section h4 { color: var(--color-principal); margin-top: 20px; margin-bottom: 10px; }
+        .docs-section p, .docs-section li { line-height: 1.6; margin-bottom: 10px; font-size: 1.1em; }
+        .docs-section ul { margin-left: 20px; margin-bottom: 20px; }
+        .code-block { background: #1e1e1e; color: #d4d4d4; padding: 15px; border-radius: 8px; font-family: monospace; overflow-x: auto; margin: 15px 0; border: 1px solid #333; }
+        .back-link { display: inline-block; padding: 10px 20px; background: var(--color-principal); color: white; text-decoration: none; border-radius: 5px; margin-bottom: 20px; font-weight: bold; }
+        .back-link:hover { background: var(--color-principal-lighter); }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="../../../index.html" style="text-decoration: none;">
+            <div class="logo"><img src="../../../img/logo.png" alt="Logo" width="50px"><h1>MICRO<span style="color: var(--color-principal-lighter)">ODS</span></h1></div>
+        </a>
+    </header>
+    <main>
+        <div class="docs-container">
+            <a href="../docs.html" class="back-link">← Volver al Índice</a>
+            <h1 style="text-align: center; font-size: 2.5em;">Super Farmer</h1>
+            <p style="text-align: center; color: #aaa;">Documentación Técnica</p>
+
+            <section class="docs-section">
+                <h2>1. Ficha Técnica</h2>
+                <ul>
+                    <li><strong>Nombre:</strong> Super Farmer</li>
+                    <li><strong>ODS:</strong> ODS 2 - Hambre Cero</li>
+                    <li><strong>Objetivo:</strong> Usar las teclas WASD o las Flechas para pilotar un tractor agrícola por una grilla/campo obteniendo zanahorias maduras, mientras se eluden brotes de crecimiento prematuro y rocas o accidentes naturales.</li>
+                </ul>
+            </section>
+
+            <section class="docs-section">
+                <h2>2. Mecánica y Flujo de Juego</h2>
+                <p>El juego implementa movimiento multidireccional interactivo en "Top Down View" con input de teclado (<code>keydown</code> / <code>keyup</code>). Asemeja a clásicos como <em>Pac-Man</em> sin estar bloqueado a una grid forzada puramente (se permite moverse libremente con Float Values).</p>
+                <ol>
+                    <li>Un tractor arranca en el centro de la pantalla.</li>
+                    <li>Nodos (Zanahorias, Rocas, Brotes Verdes) se reparten como estáticos en un mapa asíncrono con `generateMap()`.</li>
+                    <li>Al mantener WASD, se suman multiplicadores (`this.keys.w`) al Vector del jugador.</li>
+                    <li>Se escupe sobre los obstaculos para recolectar o perder.</li>
+                </ol>
+            </section>
+
+            <section class="docs-section">
+                <h2>3. Lógica de Programación</h2>
+                <p>Las mecánicas recaen intensamente sobre <code>requestAnimationFrame</code> ejecutando una evaluación permanente de matrices (Arrays de Items) en el método Update.</p>
+
+                <h3>Multi-Key Movement (Movimiento Teclado Multi-Dimensional)</h3>
+                <div class="code-block">
+this.keys = { ArrowUp: false, ArrowDown: false, ... };
+document.addEventListener('keydown', (e) => this.keys[e.key] = true);
+document.addEventListener('keyup', (e) => this.keys[e.key] = false);
+
+update() {
+    if(this.keys.ArrowUp || this.keys.w) this.playerY -= this.speed;
+} // Se ejecuta 60 veces o más por sg.
+                </div>
+                <p>Esta metodología permite pulsaciones simultáneas como Up-Right para movimientos diagonales interpolados fluidamente sin Input Lag de JS y OS repetido.</p>
+
+                <h3>Algoritmo de Colisiones Hitboxes</h2>
+                <p>La distancia entre el centro geométrico de todos los ítems de campo contra el reproductor <code>Math.hypot(dx, dy) < Threshold</code> confirma colisiones radiales, un proxy esférico más bondadoso para los jugadores que la cuadrícula dura (AABB Square).</p>
+            </section>
+
+            <section class="docs-section">
+                <h2>4. Sistema de Victoria/Derrota</h2>
+                <p><strong>Victoria:</strong> Acoplar suficientes Zanahorias antes del Timer a meta contada en <code>this.collectedCrops >= this.targetCrops</code>.</p>
+                <p><strong>Derrota:</strong> Contactar con una Roca o pisar excesivos brotes verdes que no estaban preparados para siega.</p>
+            </section>
+        </div>
+    </main>
+    <footer>
+        <div class="grid"><div class="logo"><img src="../../../img/logo.png" width="50px"><p>MICRO<span style="color: var(--color-principal)">ODS</span><br></p></div></div>
+    </footer>
+</body>
+</html>
