@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doc: Eco Run</title>
+    <link rel="shortcut icon" href="../../../img/logo.png" type="image/x-icon">
+    <link rel="stylesheet" href="../../../css/style.css">
+    <style>
+        .docs-container { max-width: 1000px; margin: 40px auto; padding: 20px; background: rgba(255, 255, 255, 0.05); border-radius: 15px; backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .docs-section { margin-bottom: 40px; padding-bottom: 20px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+        .docs-section h2 { color: var(--color-principal-lighter); margin-bottom: 20px; font-size: 2em; }
+        .docs-section h3, .docs-section h4 { color: var(--color-principal); margin-top: 20px; margin-bottom: 10px; }
+        .docs-section p, .docs-section li { line-height: 1.6; margin-bottom: 10px; font-size: 1.1em; }
+        .docs-section ul { margin-left: 20px; margin-bottom: 20px; }
+        .code-block { background: #1e1e1e; color: #d4d4d4; padding: 15px; border-radius: 8px; font-family: monospace; overflow-x: auto; margin: 15px 0; border: 1px solid #333; }
+        .back-link { display: inline-block; padding: 10px 20px; background: var(--color-principal); color: white; text-decoration: none; border-radius: 5px; margin-bottom: 20px; font-weight: bold; }
+        .back-link:hover { background: var(--color-principal-lighter); }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="../../../index.html" style="text-decoration: none;">
+            <div class="logo"><img src="../../../img/logo.png" alt="Logo" width="50px"><h1>MICRO<span style="color: var(--color-principal-lighter)">ODS</span></h1></div>
+        </a>
+    </header>
+    <main>
+        <div class="docs-container">
+            <a href="../docs.html" class="back-link">← Volver al Índice</a>
+            <h1 style="text-align: center; font-size: 2.5em;">Eco Run</h1>
+            <p style="text-align: center; color: #aaa;">Documentación Técnica</p>
+
+            <section class="docs-section">
+                <h2>1. Ficha Técnica</h2>
+                <ul>
+                    <li><strong>Nombre:</strong> Eco Run</li>
+                    <li><strong>ODS:</strong> ODS 14 - Vida Submarina / ODS 15 - Vida de Ecosistemas Terrestres</li>
+                    <li><strong>Objetivo:</strong> Hacer clic de forma rápida en la basura que aparece en localizaciones aleatorias de la pantalla antes de que desaparezca o el reloj marque cero.</li>
+                </ul>
+            </section>
+
+            <section class="docs-section">
+                <h2>2. Mecánica y Flujo de Juego</h2>
+                <p>Pertenece a la familia de los juegos "Reaction Clicker". La naturaleza procedimental del juego depende del bucle central que invoca objetos asíncronamente.</p>
+                <ol>
+                    <li>El estado inicia con contador de basura en 0.</li>
+                    <li>El <code>setInterval</code> global (`spawnInterval`) inyecta un Div simulando basura cada "x" milisegundos.</li>
+                    <li>El jugador hace clic y suma puntos. Si ignora la basura, un <code>setTimeout</code> interno puede destruirla y penalizar.</li>
+                    <li>A un número definido de clicks exitosos, el juego acaba y ganas.</li>
+                </ol>
+            </section>
+
+            <section class="docs-section">
+                <h2>3. Lógica de Programación</h2>
+                <p>El juego utiliza coordenadas CSS absolutas (<code>left</code> y <code>top</code> con valores en porcentaje) instanciadas mediante <code>Math.random() * 80 + 10 + '%'</code> para asegurar que el nodo permanezca jugable dentro de los márgenes y no desborde.</p>
+
+                <h3>Eventos Principales</h3>
+                <ul>
+                    <li><code>click</code>: Agregado dinámicamente a cada Div de basura que es generado. Enlaza con una función callback para ocultar el nodo y sumar progreso. Incluye <code>e.stopPropagation()</code> para evitar clics accidentales subyacentes.</li>
+                </ul>
+
+                <h3>Variables Importantes</h3>
+                <div class="code-block">
+this.collectedTrash = 0; 
+this.targetTrash = 10 + (this.level * 2); 
+this.spawnRate = Math.max(300, 1000 - (this.level * 100)); // Spawn en ms progresivo
+                </div>
+            </section>
+
+            <section class="docs-section">
+                <h2>4. Sistema de Victoria/Derrota</h2>
+                <p>
+                    <strong>Victoria:</strong> El bucle del intervalo comprueba siempre <code>if (this.collectedTrash >= this.targetTrash) this.finish(true)</code>. Las metas escalan exponencialmente según el nivel.
+                </p>
+                <p>
+                    <strong>Derrota:</strong> <code>BaseGame</code> monitorea el tiempo en milisegundos restado por Frame. Si finaliza sin que the collectedTrash empate con target, es Game Over.
+                </p>
+            </section>
+
+            <section class="docs-section">
+                <h2>5. Posibles Mejoras Futuras</h2>
+                <ul>
+                    <li>El contenedor genera acumulación en el DOM si el Timeout de expiración natural no la remueve, lo mejor sería almacenar los nodos en un Array global y limpiar el recolector de basura (Garbage Collector real de JS).</li>
+                    <li>Incluir distractores como animales que si haces clic restan puntos.</li>
+                </ul>
+            </section>
+        </div>
+    </main>
+    <footer>
+        <div class="grid"><div class="logo"><img src="../../../img/logo.png" width="50px"><p>MICRO<span style="color: var(--color-principal)">ODS</span><br></p></div></div>
+    </footer>
+</body>
+</html>
