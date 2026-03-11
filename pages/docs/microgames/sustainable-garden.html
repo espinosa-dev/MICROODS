@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doc: Sustainable Garden</title>
+    <link rel="shortcut icon" href="../../../img/logo.png" type="image/x-icon">
+    <link rel="stylesheet" href="../../../css/style.css">
+    <style>
+        .docs-container { max-width: 1000px; margin: 40px auto; padding: 20px; background: rgba(255, 255, 255, 0.05); border-radius: 15px; backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .docs-section { margin-bottom: 40px; padding-bottom: 20px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+        .docs-section h2 { color: var(--color-principal-lighter); margin-bottom: 20px; font-size: 2em; }
+        .docs-section h3, .docs-section h4 { color: var(--color-principal); margin-top: 20px; margin-bottom: 10px; }
+        .docs-section p, .docs-section li { line-height: 1.6; margin-bottom: 10px; font-size: 1.1em; }
+        .docs-section ul { margin-left: 20px; margin-bottom: 20px; }
+        .code-block { background: #1e1e1e; color: #d4d4d4; padding: 15px; border-radius: 8px; font-family: monospace; overflow-x: auto; margin: 15px 0; border: 1px solid #333; }
+        .back-link { display: inline-block; padding: 10px 20px; background: var(--color-principal); color: white; text-decoration: none; border-radius: 5px; margin-bottom: 20px; font-weight: bold; }
+        .back-link:hover { background: var(--color-principal-lighter); }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="../../../index.html" style="text-decoration: none;">
+            <div class="logo"><img src="../../../img/logo.png" alt="Logo" width="50px"><h1>MICRO<span style="color: var(--color-principal-lighter)">ODS</span></h1></div>
+        </a>
+    </header>
+    <main>
+        <div class="docs-container">
+            <a href="../docs.html" class="back-link">← Volver al Índice</a>
+            <h1 style="text-align: center; font-size: 2.5em;">Sustainable Garden</h1>
+            <p style="text-align: center; color: #aaa;">Documentación Técnica</p>
+
+            <section class="docs-section">
+                <h2>1. Ficha Técnica</h2>
+                <ul>
+                    <li><strong>Nombre:</strong> Sustainable Garden</li>
+                    <li><strong>ODS:</strong> ODS 15 - Vida de Ecosistemas Terrestres</li>
+                    <li><strong>Objetivo:</strong> Reaccionar a las exigencias variables (semillas, agua, sol) de las distintas plantas de un huerto, proveyéndolas del ítem seleccionado oportuno antes de que marchiten.</li>
+                </ul>
+            </section>
+
+            <section class="docs-section">
+                <h2>2. Mecánica y Flujo de Juego</h2>
+                <p>Categorizado como un <strong>Time/Resource Management</strong> primitivo ("Plant Nanny" / Tamagotchi). El ritmo es altamente multitarea y depende del UI para conmutar estados ("tools").</p>
+                <ol>
+                    <li>La cuadrícula visual hospeda celdas de tierra individuales (Slots vacíos sin instanciar).</li>
+                    <li>El temporizador Global arranca y, periódicamente, una celda cambia visual y lógicamente reclamando una necesidad de las 3 disponibles (semilla, agua, luz), mediante el renderizado de iconos CSS y Emojis DOM.</li>
+                    <li>El jugador pulsa 1 de los 3 botones-herramienta del Menú HUD y luego clica en la planta necesitada.</li>
+                    <li>El clic resuelve un empate/<code>if(requerimiento === herramientaActiva)</code> devolviendo a la planta a su estado neutral `healthy`.</li>
+                </ol>
+            </section>
+
+            <section class="docs-section">
+                <h2>3. Lógica de Programación</h2>
+                <p>Las plantas individuales implementan su propio ciclo de vida y muerte. No están aglomeradas sino indexadas en una matriz manejable.</p>
+
+                <h3>Manejadores de Timeout por Slot</h3>
+                <div class="code-block">
+let timeoutId = setTimeout(() => {
+    plant.estado = 'muerta';
+    this.perderVidas();
+}, plant.pacienciaTotalMs);
+                </div>
+                <p>El desafío consiste en <code>clearTimeout(timeoutId)</code> instantes antes de que dicho Timeout dispare el trigger destructivo, siempre y cuando la Herramienta (Tool) del puntero coicida con el tag de esa planta.</p>
+
+                <h3>Escaneo Masivo UI</h2>
+                <p>Una variable <code>this.selectedTool</code> guarda un string universal en la clase madre (ej: <code>'water'</code>). El DOM repinta <code>border: 3px solid yellow</code> alrededor del botón HTML activo, emulando la barra caliente de inventario clásica en juegos de Farming.</p>
+            </section>
+
+            <section class="docs-section">
+                <h2>4. Sistema de Victoria/Derrota</h2>
+                <p><strong>Victoria:</strong> Resistir la oleada controlando el caos. Cada sanación computa un número a <code>this.plantsSaved</code>. Llegar a la meta culmina el Nivel.</p>
+                <p><strong>Derrota:</strong> 
+                   Cualquier planta que el usuario ignore o que intente subsanar con la herramienta equívoca, transicionará a inerte y penalizará globalmente al usuario o fallará sumariamente el Minijuego.
+                </p>
+            </section>
+        </div>
+    </main>
+    <footer>
+        <div class="grid"><div class="logo"><img src="../../../img/logo.png" width="50px"><p>MICRO<span style="color: var(--color-principal)">ODS</span><br></p></div></div>
+    </footer>
+</body>
+</html>

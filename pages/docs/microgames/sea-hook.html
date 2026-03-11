@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doc: Sea Hook</title>
+    <link rel="shortcut icon" href="../../../img/logo.png" type="image/x-icon">
+    <link rel="stylesheet" href="../../../css/style.css">
+    <style>
+        .docs-container { max-width: 1000px; margin: 40px auto; padding: 20px; background: rgba(255, 255, 255, 0.05); border-radius: 15px; backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .docs-section { margin-bottom: 40px; padding-bottom: 20px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+        .docs-section h2 { color: var(--color-principal-lighter); margin-bottom: 20px; font-size: 2em; }
+        .docs-section h3, .docs-section h4 { color: var(--color-principal); margin-top: 20px; margin-bottom: 10px; }
+        .docs-section p, .docs-section li { line-height: 1.6; margin-bottom: 10px; font-size: 1.1em; }
+        .docs-section ul { margin-left: 20px; margin-bottom: 20px; }
+        .code-block { background: #1e1e1e; color: #d4d4d4; padding: 15px; border-radius: 8px; font-family: monospace; overflow-x: auto; margin: 15px 0; border: 1px solid #333; }
+        .back-link { display: inline-block; padding: 10px 20px; background: var(--color-principal); color: white; text-decoration: none; border-radius: 5px; margin-bottom: 20px; font-weight: bold; }
+        .back-link:hover { background: var(--color-principal-lighter); }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="../../../index.html" style="text-decoration: none;">
+            <div class="logo"><img src="../../../img/logo.png" alt="Logo" width="50px"><h1>MICRO<span style="color: var(--color-principal-lighter)">ODS</span></h1></div>
+        </a>
+    </header>
+    <main>
+        <div class="docs-container">
+            <a href="../docs.html" class="back-link">← Volver al Índice</a>
+            <h1 style="text-align: center; font-size: 2.5em;">Sea Hook</h1>
+            <p style="text-align: center; color: #aaa;">Documentación Técnica</p>
+
+            <section class="docs-section">
+                <h2>1. Ficha Técnica</h2>
+                <ul>
+                    <li><strong>Nombre:</strong> Sea Hook</li>
+                    <li><strong>ODS:</strong> ODS 14 - Vida Submarina</li>
+                    <li><strong>Objetivo:</strong> Mover el barco/gancho pescador con el cursor del ratón para atrapar exclusivamente residuos plásticos y botellas y no peces.</li>
+                </ul>
+            </section>
+
+            <section class="docs-section">
+                <h2>2. Mecánica y Flujo de Juego</h2>
+                <p>Categorizado como <strong>"Catch Game" o "Catcher" inverso</strong>. En la típica variante WarioWare, los objetos caen desde el cielo al jugador. En este caso el barco está arriba, pero el comportamiento lineal de spawn inferior ascendente es fundamentalmente idéntico.</p>
+                <ol>
+                    <li>El DOM registra el movimiento global del puntero con <code>mousemove</code> en el contenedor.</li>
+                    <li>El gancho/barco reescribe su <code>left: %</code> a la misma proporción.</li>
+                    <li>El océano engendra aleatoriamente Objetos Positivos (peces) o Negativos (Basura) desde abajo.</li>
+                    <li>Estos iteran un vector velocidad (<code>y -= speed</code>) hasta llegar al top, donde interceptan si chocan con la coordenada del barco.</li>
+                </ol>
+            </section>
+
+            <section class="docs-section">
+                <h2>3. Lógica de Programación</h2>
+                <p>Las coordenadas en X siguen una sincronización lineal. La principal preocupación matemática radica en traducir coordenadas del Mouse (Pixeles) a Porcentajes CSS.</p>
+
+                <h3>Ratón a Porcentaje (%)</h3>
+                <div class="code-block">
+this.container.addEventListener('mousemove', (e) => {
+    const rect = this.container.getBoundingClientRect();
+    let x = ((e.clientX - rect.left) / rect.width) * 100;
+    this.hookX = Math.max(5, Math.min(x, 95));
+});
+                </div>
+
+                <h3>Colisiones 1D</h3>
+                <p>Puesto que la nave/gancho yace perennemente atorada en el eje Y (Arriba, Y superior asume ~10%), no necesitamos chequear iteraciones completas Rect/Rect con cada cuadro en dos dimensiones. Basta verificar en el Method <code>update()</code> de la basura si su variable local Y se acerca al gancho en el mismo momento en que su <code>Math.abs(item.x - this.hookX) < Margen_de_Captura</code>.</p>
+            </section>
+
+            <section class="docs-section">
+                <h2>4. Sistema de Victoria/Derrota</h2>
+                <p><strong>Victoria:</strong> Colectar exitosamente mediante la colisión calculada un número prefijado de basuras representadas en el HUD.</p>
+                <p><strong>Derrota:</strong> 
+                   <ul>
+                       <li>Colectar un pescado (Game Over directo castigado por pesca indiscriminada).</li>
+                       <li>Dejar que la basura se escape (opcional según balanceo).</li>
+                       <li>Quedarse sin tiempo en el reloj mundial `this.timeLeft`.</li>
+                   </ul>
+                </p>
+            </section>
+        </div>
+    </main>
+    <footer>
+        <div class="grid"><div class="logo"><img src="../../../img/logo.png" width="50px"><p>MICRO<span style="color: var(--color-principal)">ODS</span><br></p></div></div>
+    </footer>
+</body>
+</html>

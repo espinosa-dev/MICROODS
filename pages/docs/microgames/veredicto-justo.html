@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doc: Veredicto Justo</title>
+    <link rel="shortcut icon" href="../../../img/logo.png" type="image/x-icon">
+    <link rel="stylesheet" href="../../../css/style.css">
+    <style>
+        .docs-container { max-width: 1000px; margin: 40px auto; padding: 20px; background: rgba(255, 255, 255, 0.05); border-radius: 15px; backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .docs-section { margin-bottom: 40px; padding-bottom: 20px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+        .docs-section h2 { color: var(--color-principal-lighter); margin-bottom: 20px; font-size: 2em; }
+        .docs-section h3, .docs-section h4 { color: var(--color-principal); margin-top: 20px; margin-bottom: 10px; }
+        .docs-section p, .docs-section li { line-height: 1.6; margin-bottom: 10px; font-size: 1.1em; }
+        .docs-section ul { margin-left: 20px; margin-bottom: 20px; }
+        .code-block { background: #1e1e1e; color: #d4d4d4; padding: 15px; border-radius: 8px; font-family: monospace; overflow-x: auto; margin: 15px 0; border: 1px solid #333; }
+        .back-link { display: inline-block; padding: 10px 20px; background: var(--color-principal); color: white; text-decoration: none; border-radius: 5px; margin-bottom: 20px; font-weight: bold; }
+        .back-link:hover { background: var(--color-principal-lighter); }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="../../../index.html" style="text-decoration: none;">
+            <div class="logo"><img src="../../../img/logo.png" alt="Logo" width="50px"><h1>MICRO<span style="color: var(--color-principal-lighter)">ODS</span></h1></div>
+        </a>
+    </header>
+    <main>
+        <div class="docs-container">
+            <a href="../docs.html" class="back-link">← Volver al Índice</a>
+            <h1 style="text-align: center; font-size: 2.5em;">Veredicto Justo</h1>
+            <p style="text-align: center; color: #aaa;">Documentación Técnica</p>
+
+            <section class="docs-section">
+                <h2>1. Ficha Técnica</h2>
+                <ul>
+                    <li><strong>Nombre:</strong> Veredicto Justo</li>
+                    <li><strong>ODS:</strong> ODS 16 - Paz, Justicia e Instituciones Sólidas</li>
+                    <li><strong>Objetivo:</strong> Entrenar la puntería visual ("Aiming") pinchando sobre los iconos de Justicia de la balanza, evitando pinchar accidentalmente o impactar cualquier icono de billetes o sobornos (Corrupción).</li>
+                </ul>
+            </section>
+
+            <section class="docs-section">
+                <h2>2. Mecánica y Flujo de Juego</h2>
+                <p>Las mecánicas actúan como un Simulador de Física de Bola/Rebote 2D puro en el navegador.</p>
+                <ol>
+                    <li>La pantalla se inunda de dos tipos de nodos DOM (`Justicia` y `Corrupción`).</li>
+                    <li>Cada nodo hereda una velocidad de vector X, Y asignada matemáticamente al vuelo (`vx`, `vy`), forzándolo a transitar en pantalla mediante bucles Frame.</li>
+                    <li>Cuando impactan en los márgenes máximos 0-100% Top y Right, su velocidad es automáticamente invertida simulando un rebote sin pérdida cinética.</li>
+                    <li>El humano debe pulsar sobre la balanza antes que desvanezca en el caos.</li>
+                </ol>
+            </section>
+
+            <section class="docs-section">
+                <h2>3. Lógica de Programación</h2>
+                <p>Construir rebotes puros amerita calcular las esquinas exactas considerando los <code>getBoundingClientRect</code> del nodo visual para no cortar las texturas del Emoji.</p>
+
+                <h3>Instanciación Dimensional</h3>
+                <div class="code-block">
+let icon = { ... };
+// Inicializamos el vector pseudo-aleatorio garantizando movimiento (0.5 a 1) * multiplier
+icon.vx = (Math.random() < 0.5 ? 1 : -1) * (0.5 + Math.random() * 0.5) * this.speedMultiplier;
+icon.vy = (Math.random() < 0.5 ? 1 : -1) * (0.5 + Math.random() * 0.5) * this.speedMultiplier;
+                </div>
+
+                <h3>Rebotar (Engine Logic)</h3>
+                <div class="code-block">
+// Si X toca pared izquierda (<0%) o derecha (> width de container), invierte la polaridad horizontal de viaje
+if (icon.x <= 0 || icon.x >= 100 - xPercent) {
+    icon.vx *= -1;
+}
+if (icon.y <= 0 || icon.y >= 100 - yPercent) {
+    icon.vy *= -1;
+}
+                </div>
+                <p>La combinación de valores pre-multiplicadores <code>speedMultiplier</code>, los cuales el usuario atenuó a <code>0.55</code> en el Nivel 3 para facilitar el rastreo y clics en resoluciones estándar, permite ajustar el Tuning sin romper el motor matemático.</p>
+            </section>
+
+            <section class="docs-section">
+                <h2>4. Sistema de Victoria/Derrota</h2>
+                <p><strong>Victoria:</strong> Clicar todos los iconos benignos sin fallar ni omitir ninguno. <code>this.justiciaCount === 0</code> dicta final satisfactorio.</p>
+                <p><strong>Derrota:</strong> Dispararle/Pinchar erróneamente sobre el billete del soborno y agotar el TimeOut base (General timeout rules of `BaseGame`).</p>
+            </section>
+
+            <section class="docs-section">
+                <h2>5. Limitaciones Teóricas e Implementaciones</h2>
+                <p>Las bolas en este simulador rebotan lógicamente *solo contra la caja-contenedor global*. No se incluyó una iteración costosa N*N rect-overlap para chocar los iconos entre ellos porque perjudicaba la responsividad general de la página para la UI del Mouse Cursor, optando astutamente por priorizar fluidez frente a fidelidad física minúscula.</p>
+            </section>
+        </div>
+    </main>
+    <footer>
+        <div class="grid"><div class="logo"><img src="../../../img/logo.png" width="50px"><p>MICRO<span style="color: var(--color-principal)">ODS</span><br></p></div></div>
+    </footer>
+</body>
+</html>

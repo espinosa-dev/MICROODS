@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía de Minijuegos - Microjuegos</title>
+    <link rel="shortcut icon" href="../../img/logo.png" type="image/x-icon">
+    <link rel="stylesheet" href="../../css/style.css">
+
+    <!-- Games CSS required for the tutorials to render properly -->
+    <link rel="stylesheet" href="../../css/games.css">
+
+    <style>
+        .games-hero {
+            text-align: center;
+            padding: 60px 20px;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.8), rgba(var(--bg-color-rgb), 1));
+            margin-bottom: 40px;
+        }
+
+        .games-hero h1 {
+            font-size: 3.5rem;
+            color: white;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .games-hero h1 span {
+            color: var(--color-principal);
+        }
+
+        .games-hero p {
+            font-size: 1.2rem;
+            color: #ddd;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            padding: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+            margin-bottom: 60px;
+        }
+
+        .game-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .game-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(var(--color-principal-rgb), 0.2);
+            border-color: var(--color-principal);
+        }
+
+        .game-card-header {
+            padding: 30px 20px;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.3);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .game-icon {
+            font-size: 4rem;
+            filter: drop-shadow(0 0 10px rgba(var(--color-principal-rgb), 0.5));
+        }
+
+        .game-title {
+            font-size: 1.5rem;
+            color: white;
+            margin: 0;
+            font-weight: 700;
+        }
+
+        .ods-badge {
+            background: var(--color-principal);
+            color: #111;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+        }
+
+        .game-card-body {
+            padding: 25px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .game-desc {
+            color: #ccc;
+            font-size: 1.05rem;
+            line-height: 1.6;
+        }
+
+        .how-to-play {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            border-radius: 12px;
+            border-left: 4px solid var(--color-secundario);
+        }
+
+        .how-to-play h4 {
+            color: white;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .how-to-play ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .how-to-play li {
+            position: relative;
+            padding-left: 20px;
+            color: #ccc;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+
+        .how-to-play li::before {
+            content: "🎮";
+            position: absolute;
+            left: 0;
+            top: 1px;
+            font-size: 0.8rem;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: auto;
+        }
+
+        .play-btn {
+            background: var(--color-principal);
+            color: #111;
+            text-decoration: none;
+            text-align: center;
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: background 0.3s;
+            flex: 1;
+            border: none;
+            cursor: pointer;
+        }
+
+        .play-btn:hover {
+            background: var(--color-principal-lighter);
+        }
+
+        .tutorial-btn {
+            background: rgba(var(--color-secundario-rgb), 0.8);
+            color: #fff;
+            text-decoration: none;
+            text-align: center;
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+            flex: 1;
+            border: 2px solid transparent;
+            cursor: pointer;
+        }
+
+        .tutorial-btn:hover {
+            background: var(--color-secundario);
+            box-shadow: 0 0 15px rgba(var(--color-secundario-rgb), 0.5);
+        }
+
+        /* Modal Styles */
+        .tutorial-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .tutorial-modal.active {
+            display: flex;
+        }
+
+        .tutorial-content {
+            background: #111;
+            width: 90%;
+            max-width: 800px;
+            height: 80vh;
+            /* Fixed height ratio for game */
+            border-radius: 15px;
+            border: 2px solid var(--color-principal);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 0 30px rgba(var(--color-principal-rgb), 0.3);
+        }
+
+        .tutorial-header {
+            padding: 15px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .tutorial-header h2 {
+            margin: 0;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .close-tutorial {
+            background: none;
+            border: none;
+            color: #ff4c4c;
+            font-size: 2rem;
+            line-height: 1;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .close-tutorial:hover {
+            transform: scale(1.2);
+        }
+
+        .tutorial-game-area {
+            flex-grow: 1;
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background: #222;
+            overflow: hidden;
+        }
+
+        /* Emulate timer bar for tutorials */
+        .tutorial-timer-container {
+            width: 100%;
+            height: 10px;
+            background: #333;
+        }
+
+        #gameTimerBar {
+            height: 100%;
+            width: 100%;
+            background: linear-gradient(90deg, #4caf50, #ffeb3b, #f44336);
+            transition: width 1s linear;
+        }
+
+        .tutorial-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .tutorial-overlay h1 {
+            color: white;
+            font-size: 3rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .tutorial-overlay button {
+            background: var(--color-principal);
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <a href="../../index.html">
+            <div class="logo">
+                <img src="../../img/logo.png" alt="Logo" width="50px">
+                <h1>MICRO<span style="color: var(--color-principal-lighter)">ODS</span></h1>
+            </div>
+        </a>
+        <nav>
+            <li><a href="../../index.html">Inicio</a></li>
+            <li><a href="../marcador.html">Marcador</a></li>
+            <li><a href="../about-us.html">Sobre Nosotros</a></li>
+        </nav>
+    </header>
+
+    <main>
+        <section class="games-hero">
+            <h1>Guía de <span>Microjuegos</span></h1>
+            <p>Descubre los 8 trepidantes minijuegos que pondrán a prueba tus reflejos mientras contribuyes a crear un
+                mundo mejor mediante los Objetivos de Desarrollo Sostenible.</p>
+        </section>
+
+        <section class="games-grid">
+
+            <!-- Game 1 -->
+            <div class="game-card">
+                <div class="game-card-header">
+                    <div class="game-icon">🏫</div>
+                    <span class="ods-badge">ODS 4: Educación de Calidad</span>
+                    <h3 class="game-title">Aula Equipada</h3>
+                </div>
+                <div class="game-card-body">
+                    <p class="game-desc">Asegúrate de que todos los alumnos tengan el material escolar necesario para
+                        poder seguir la clase a tiempo.</p>
+                    <div class="how-to-play">
+                        <h4>Mecánicas:</h4>
+                        <ul>
+                            <li>Mantén el click pulsado sobre los materiales requeridos.</li>
+                            <li>Arrastra el material (Drag & Drop) hacia el alumno correspondiente.</li>
+                            <li>A mayor nivel, aparecerán objetos engañosos (distractores) y los alumnos podrán moverse.
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="btn-group">
+                        <button class="tutorial-btn" data-game="aula-equipada" data-title="Aula Equipada">Probar
+                            Tutorial</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Game 2 -->
+            <div class="game-card">
+                <div class="game-card-header">
+                    <div class="game-icon">🧹</div>
+                    <span class="ods-badge">ODS 11: Ciudades Sostenibles</span>
+                    <h3 class="game-title">Limpiar la ciudad (Eco Run)</h3>
+                </div>
+                <div class="game-card-body">
+                    <p class="game-desc">La ciudad se está llenando de basura. Reacciona rápido para limpiarla antes de
+                        que sea demasiado tarde.</p>
+                    <div class="how-to-play">
+                        <h4>Mecánicas:</h4>
+                        <ul>
+                            <li>Haz clic en cada foco de basura en cuanto aparezca.</li>
+                            <li>Debes eliminar el objetivo de basura antes de que acabe el tiempo.</li>
+                            <li>Si ignoras la basura, esta desaparecerá y perderás la oportunidad de limpiarla.</li>
+                        </ul>
+                    </div>
+                    <div class="btn-group">
+                        <button class="tutorial-btn" data-game="eco-run" data-title="Limpiar la Ciudad (Eco Run)">Probar
+                            Tutorial</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Game 3 -->
+            <div class="game-card">
+                <div class="game-card-header">
+                    <div class="game-icon">🚲</div>
+                    <span class="ods-badge">ODS 11: Movilidad Sostenible</span>
+                    <h3 class="game-title">Movilidad Segura</h3>
+                </div>
+                <div class="game-card-body">
+                    <p class="game-desc">Facilita el movimiento de los transportes ecológicos protegiéndolos del tráfico
+                        denso y contaminante.</p>
+                    <div class="how-to-play">
+                        <h4>Mecánicas:</h4>
+                        <ul>
+                            <li>Agarra y mueve los patinetes y bicis esquivando los distintos coches por la carretera.
+                            </li>
+                            <li>Pulsa sobre las nubes de "smog" para disiparlas y recuperar la visión de la autovía.
+                            </li>
+                            <li>Evita chocar contra los vehículos grandes o provocarás un accidente automático.</li>
+                        </ul>
+                    </div>
+                    <div class="btn-group">
+                        <button class="tutorial-btn" data-game="movilidad-sostenible"
+                            data-title="Movilidad Segura">Probar Tutorial</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Game 4 -->
+            <div class="game-card">
+                <div class="game-card-header">
+                    <div class="game-icon">♻️</div>
+                    <span class="ods-badge">ODS 12: Producción Sostenible</span>
+                    <h3 class="game-title">Reciclaje Rápido</h3>
+                </div>
+                <div class="game-card-body">
+                    <p class="game-desc">Los residuos caen rápidamente por la cinta transportadora y es tu deber
+                        reciclarlos en su papelera específica.</p>
+                    <div class="how-to-play">
+                        <h4>Mecánicas:</h4>
+                        <ul>
+                            <li>Arrastra los metodos u objetos que caen desde el cielo hacia las papeleras de la base.
+                            </li>
+                            <li>Usa la papelera Azul (Papel), Verde (Vidrio) y Amarilla (Plástico).</li>
+                            <li>Cuidado: Dejar caer residuos al suelo o tirarlos en una papelera equivocada te sumarán
+                                errores. Si superas el límite, fallas.</li>
+                        </ul>
+                    </div>
+                    <div class="btn-group">
+                        <button class="tutorial-btn" data-game="recycle-sort" data-title="Reciclaje Rápido">Probar
+                            Tutorial</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Game 5 -->
+            <div class="game-card">
+                <div class="game-card-header">
+                    <div class="game-icon">🔌</div>
+                    <span class="ods-badge">ODS 7: Energía Asequible</span>
+                    <h3 class="game-title">Ahorro Energético</h3>
+                </div>
+                <div class="game-card-body">
+                    <p class="game-desc">El consumo eléctrico de la casa se está disparando. Vigila el cuadro de la
+                        pared y apaga lo prescindible.</p>
+                    <div class="how-to-play">
+                        <h4>Mecánicas:</h4>
+                        <ul>
+                            <li>Haz clic rápido en los dispositivos brillantes (luces, televisiones y routers
+                                emergentes) para apagarlos de nuevo.</li>
+                            <li>¡Aguanta vivo el máximo tiempo posible!</li>
+                            <li>La derrota ocurre si dejas que se acumulen 3 dispositivos encendidos y no los apagas a
+                                tiempo.</li>
+                        </ul>
+                    </div>
+                    <div class="btn-group">
+                        <button class="tutorial-btn" data-game="save-energy" data-title="Ahorro Energético">Probar
+                            Tutorial</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Game 6 -->
+            <div class="game-card">
+                <div class="game-card-header">
+                    <div class="game-icon">🐟</div>
+                    <span class="ods-badge">ODS 14: Vida Submarina</span>
+                    <h3 class="game-title">Gancho Oceánico (Sea Hook)</h3>
+                </div>
+                <div class="game-card-body">
+                    <p class="game-desc">A bordo de nuestro barco ecológico, emplea tu grúa gancho para librar al
+                        ecosistema de chatarra tóxica.</p>
+                    <div class="how-to-play">
+                        <h4>Mecánicas:</h4>
+                        <ul>
+                            <li>Mueve tu ratón lateralmente; el gancho receptor emulará exactamente tu posición X bajo
+                                el agua.</li>
+                            <li>Recoge las latas y desperdicios tóxicos dejándolos coincidir con tu barandilla.</li>
+                            <li>¡NUNCA captures a los peces inocentes (🐟)! Atrapar peces penaliza y acelera tu fracaso
+                                drásticamente.</li>
+                        </ul>
+                    </div>
+                    <div class="btn-group">
+                        <button class="tutorial-btn" data-game="sea-hook" data-title="Gancho Oceánico (Sea Hook)">Probar
+                            Tutorial</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Game 7 -->
+            <div class="game-card">
+                <div class="game-card-header">
+                    <div class="game-icon">🌱</div>
+                    <span class="ods-badge">ODS 15: Ecosistemas Terrestres</span>
+                    <h3 class="game-title">Huerto Sostenible</h3>
+                </div>
+                <div class="game-card-body">
+                    <p class="game-desc">Hazte cargo de un vivero en constante demanda, curando o protegiendo las
+                        plantas frágiles con herramientas adecuadas.</p>
+                    <div class="how-to-play">
+                        <h4>Mecánicas:</h4>
+                        <ul>
+                            <li>Fíjate en las herramientas de la interfaz: Agua, Sol y Abono Orgánico. Clickea la que
+                                desees equipar.</li>
+                            <li>Cuando una planta reclame esa necesidad, pulsa sobre la planta afectada estando equipado
+                                con dicha solución.</li>
+                            <li>La planta morirá instantes después de requerir el recurso si la ignoras o usas el abono
+                                erróneo. ¡Sálvalas a tiempo!</li>
+                        </ul>
+                    </div>
+                    <div class="btn-group">
+                        <button class="tutorial-btn" data-game="sustainable-garden"
+                            data-title="Huerto Sostenible">Probar Tutorial</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Game 8 -->
+            <div class="game-card">
+                <div class="game-card-header">
+                    <div class="game-icon">⚖️</div>
+                    <span class="ods-badge">ODS 16: Paz y Justicia</span>
+                    <h3 class="game-title">Veredicto Justo</h3>
+                </div>
+                <div class="game-card-body">
+                    <p class="game-desc">Entrena tu vista de halcón defendiendo las decisiones basadas en derecho por
+                        encima de la corrupción galopante.</p>
+                    <div class="how-to-play">
+                        <h4>Mecánicas:</h4>
+                        <ul>
+                            <li>Persigue y haz "Clic" solamente a las balanzas de la justicia (⚖️) revoltosas que
+                                rebotan por la habitación.</li>
+                            <li>Tu objetivo es agilizar el conteo antes que transcurran los 8 segundos del cronómetro
+                                judicial.</li>
+                            <li>Atinar y clickar en las bolsas de lucro corrupto (💰) provoca una derrota penalizada
+                                directa por falsedad documental.</li>
+                        </ul>
+                    </div>
+                    <div class="btn-group">
+                        <button class="tutorial-btn" data-game="veredicto-justo" data-title="Veredicto Justo">Probar
+                            Tutorial</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Game 9 -->
+            <div class="game-card">
+                <div class="game-card-header">
+                    <div class="game-icon">📦</div>
+                    <span class="ods-badge">ODS 1: Fin de la Pobreza</span>
+                    <h3 class="game-title">Supply Drop</h3>
+                </div>
+                <div class="game-card-body">
+                    <p class="game-desc">Envía cajas de ayuda humanitaria a las zonas seguras moviendo tu refugio antes de que caigan al vacío.</p>
+                    <div class="how-to-play">
+                        <h4>Mecánicas:</h4>
+                        <ul>
+                            <li>Controla la plataforma refugio (🧍🏠) moviendo el ratón de izquierda a derecha o usando las flechas del teclado.</li>
+                            <li>Atrapa las cajas que caen en paracaídas (🪂📦).</li>
+                            <li>Si una caja cae fuera de tu plataforma, perderás automáticamente.</li>
+                        </ul>
+                    </div>
+                    <div class="btn-group">
+                        <button class="tutorial-btn" data-game="supply-drop" data-title="Supply Drop">Probar
+                            Tutorial</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Game 10 -->
+            <div class="game-card">
+                <div class="game-card-header">
+                    <div class="game-icon">🚜</div>
+                    <span class="ods-badge">ODS 2: Hambre Cero</span>
+                    <h3 class="game-title">Super Farmer</h3>
+                </div>
+                <div class="game-card-body">
+                    <p class="game-desc">Conduce un tractor para recolectar la máxima cantidad de cultivos maduros antes de que se agote el tiempo.</p>
+                    <div class="how-to-play">
+                        <h4>Mecánicas:</h4>
+                        <ul>
+                            <li>Usa WSAD o las flechas de dirección para mover tu tractor por el campo.</li>
+                            <li>Recolecta todas las zanahorias (🥕) maduras, pero evita tocar los brotes verdes (🌱) o perderás la cosecha.</li>
+                            <li>Las rocas (🪨) bloquearán tu camino.</li>
+                        </ul>
+                    </div>
+                    <div class="btn-group">
+                        <button class="tutorial-btn" data-game="super-farmer" data-title="Super Farmer">Probar
+                            Tutorial</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Game 11 -->
+            <div class="game-card">
+                <div class="game-card-header">
+                    <div class="game-icon">🏭</div>
+                    <span class="ods-badge">ODS 8: Trabajo Decente</span>
+                    <h3 class="game-title">Factory Rush</h3>
+                </div>
+                <div class="game-card-body">
+                    <p class="game-desc">Redirige la cinta transportadora para asegurar que los trabajadores vayan a la fábrica sostenible y no a la fábrica que explota.</p>
+                    <div class="how-to-play">
+                        <h4>Mecánicas:</h4>
+                        <ul>
+                            <li>Los trabajadores descienden por la cinta central automáticamente.</li>
+                            <li>Haz clic en el botón de la palanca central (🔀) para cambiar la desviación de la cinta transportadora (IZQ o DER).</li>
+                            <li>Asegúrate de dejarlos a salvo en la fábrica con el cartel de "✔ Sostenible" (verde).</li>
+                        </ul>
+                    </div>
+                    <div class="btn-group">
+                        <button class="tutorial-btn" data-game="factory-rush" data-title="Factory Rush">Probar
+                            Tutorial</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Game 12 -->
+            <div class="game-card">
+                <div class="game-card-header">
+                    <div class="game-icon">🚦</div>
+                    <span class="ods-badge">ODS 11: Ciudades Sostenibles</span>
+                    <h3 class="game-title">Traffic Control</h3>
+                </div>
+                <div class="game-card-body">
+                    <p class="game-desc">Controla los semáforos del cruce de la ciudad haciendo clic, evita colisiones y frena a tiempo los coches.</p>
+                    <div class="how-to-play">
+                        <h4>Mecánicas:</h4>
+                        <ul>
+                            <li>Haz clic en el cruce central para alternar los semáforos (verde vertical u horizontal).</li>
+                            <li>Los coches avanzan automáticamente si su semáforo está en verde.</li>
+                            <li>Evita de que ningún coche choque en el centro de la intersección. Sobrevive 8 segundos.</li>
+                        </ul>
+                    </div>
+                    <div class="btn-group">
+                        <button class="tutorial-btn" data-game="traffic-control" data-title="Traffic Control">Probar
+                            Tutorial</button>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <div style="text-align: center; margin-bottom: 60px;">
+            <a href="./juego.html"
+                style="background: var(--color-secundario); color: white; padding: 20px 40px; border-radius: 15px; font-size: 1.5rem; text-decoration: none; font-weight: bold; text-transform: uppercase; display: inline-block; box-shadow: 0 10px 20px rgba(0,0,0,0.5); transition: transform 0.3s; letter-spacing: 2px;">🎮
+                Jugar Modo Arcade Completo 🎮</a>
+        </div>
+    </main>
+
+    <!-- Modal for Tutorial Engine -->
+    <div id="tutorialModal" class="tutorial-modal">
+        <div class="tutorial-content">
+            <div class="tutorial-header">
+                <h2 id="tutorialTitle">Tutorial Mode</h2>
+                <button id="closeTutorialBtn" class="close-tutorial">&times;</button>
+            </div>
+            <div class="tutorial-timer-container">
+                <div id="gameTimerBar"></div>
+            </div>
+            <div id="tutorialGameContainer" class="tutorial-game-area">
+                <!-- Game Instantiated Here -->
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="grid">
+            <div class="logo">
+                <img src="../../img/logo.png" alt="Logo" width="50px">
+                <p>MICRO<span style="color: var(--color-principal)">ODS</span> <br> <span class="author">Álvaro Espinosa
+                        Montesinos & Niranjan Sharma</span></p>
+            </div>
+            <div class="links">
+                <ul>
+                    <li><a href="https://github.com/users/espinosa-dev/projects/5" target="_blank">Proyecto GitHub</a>
+                    </li>
+                    <li><a href="https://github.com/espinosa-dev/MICROODS" target="_blank">Repositorio</a></li>
+                </ul>
+                <ul>
+                    <li><a href="../about-us.html">Sobre Nosotros</a></li>
+                    <li><a href="../docs/docs.html">Documentación</a></li>
+                </ul>
+            </div>
+            <div class="links">
+                <a href="https://www.un.org/sustainabledevelopment/es/sustainable-development-goals/"><img
+                        src="../../img/obs-logo.png" alt="Objetivos de Desarrollo Sostenible" width="100px"
+                        style="margin-left: 200px;"></a>
+            </div>
+        </div>
+    </footer>
+    <script src="../../js/header.js"></script>
+    <script type="module" src="../../js/temp.js"></script>
+
+    <!-- Tutorial Engine Script -->
+    <script type="module">
+        const modal = document.getElementById('tutorialModal');
+        const container = document.getElementById('tutorialGameContainer');
+        const closeBtn = document.getElementById('closeTutorialBtn');
+        const titleEl = document.getElementById('tutorialTitle');
+        let currentTutorialGame = null;
+
+        function showTutorialResult(success) {
+            const overlay = document.createElement('div');
+            overlay.className = 'tutorial-overlay';
+
+            if (success) {
+                overlay.style.background = 'rgba(0,100,0,0.9)';
+                overlay.innerHTML = `
+                    <h1>¡OBJETIVO LOGRADO!</h1>
+                    <button id="tutorialCloseEnd">Terminar Tutorial</button>
+                    <button id="tutorialRetryEnd" style="margin-top: 15px; background: #666;">Reintentar</button>
+                `;
+            } else {
+                overlay.style.background = 'rgba(150,0,0,0.9)';
+                overlay.innerHTML = `
+                    <h1>INTÉNTALO OTRA VEZ</h1>
+                    <button id="tutorialRetryEnd">Reintentar</button>
+                    <button id="tutorialCloseEnd" style="margin-top: 15px; background: #666;">Cerrar Tutorial</button>
+                `;
+            }
+            container.appendChild(overlay);
+
+            document.getElementById('tutorialCloseEnd').onclick = closeTutorial;
+            document.getElementById('tutorialRetryEnd').onclick = () => {
+                // To retry easily, we just close and auto-click the original button by simulating the context
+                const gameId = currentTutorialGame.__tutorialId;
+                closeTutorial();
+                setTimeout(() => {
+                    const btn = document.querySelector(`.tutorial-btn[data-game="${gameId}"]`);
+                    if (btn) btn.click();
+                }, 100);
+            };
+        }
+
+        function closeTutorial() {
+            modal.classList.remove('active');
+            if (currentTutorialGame) {
+                // Ensure game loops and timers are destroyed cleanly using its BaseGame method
+                currentTutorialGame.isActive = false;
+                if (currentTutorialGame.timerInterval) clearInterval(currentTutorialGame.timerInterval);
+                currentTutorialGame.cleanup();
+                currentTutorialGame = null;
+            }
+            container.innerHTML = '';
+        }
+
+        closeBtn.onclick = closeTutorial;
+
+        // Fetch all Game Classes asynchronously avoiding immediate full load
+        const loadGameClass = async (gameId) => {
+            switch (gameId) {
+                case 'eco-run': return (await import('../../js/microgames/eco-run.js')).EcoRunGame;
+                case 'sea-hook': return (await import('../../js/microgames/sea-hook.js')).SeaHookGame;
+                case 'sustainable-garden': return (await import('../../js/microgames/sustainable-garden.js')).SustainableGardenGame;
+                case 'recycle-sort': return (await import('../../js/microgames/recycle-sort.js')).RecycleSortGame;
+                case 'save-energy': return (await import('../../js/microgames/save-energy.js')).SaveEnergyGame;
+                case 'aula-equipada': return (await import('../../js/microgames/aula-equipada.js')).AulaEquipadaGame;
+                case 'veredicto-justo': return (await import('../../js/microgames/veredicto-justo.js')).VeredictoJustoGame;
+                case 'movilidad-sostenible': return (await import('../../js/microgames/movilidad-sostenible.js')).MovilidadSostenibleGame;
+                case 'supply-drop': return (await import('../../js/microgames/supply-drop.js')).SupplyDropGame;
+                case 'super-farmer': return (await import('../../js/microgames/super-farmer.js')).SuperFarmerGame;
+                case 'factory-rush': return (await import('../../js/microgames/factory-rush.js')).FactoryRushGame;
+                case 'traffic-control': return (await import('../../js/microgames/traffic-control.js')).TrafficControlGame;
+            }
+        };
+
+        document.querySelectorAll('.tutorial-btn').forEach(btn => {
+            btn.addEventListener('click', async (e) => {
+                const gameId = e.target.getAttribute('data-game');
+                const title = e.target.getAttribute('data-title');
+
+                titleEl.textContent = `TUTORIAL - ${title}`;
+                modal.classList.add('active');
+                container.innerHTML = '<div style="color:white;text-align:center;padding:50px;">Cargando...</div>';
+
+                try {
+                    const GameClass = await loadGameClass(gameId);
+                    container.innerHTML = ''; // Clean loading msg
+
+                    // We run tutorial on Level 1 (easy)
+                    currentTutorialGame = new GameClass(
+                        container,
+                        1,
+                        () => showTutorialResult(true),
+                        () => showTutorialResult(false)
+                    );
+
+                    currentTutorialGame.__tutorialId = gameId; // Mark for retry
+                    currentTutorialGame.start();
+
+                } catch (error) {
+                    console.error("Error loading tutorial", error);
+                    container.innerHTML = '<div style="color:red;text-align:center;padding:50px;">Error al cargar el tutorial.</div>';
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
