@@ -11,7 +11,10 @@ export class GameManager {
         this.isGameOver = false;
         this.previusGameIndex = 0
         // Game Rotation Logic
-        this.gameSequence = ['movilidad-sostenible', 'eco-run', 'sea-hook', 'sustainable-garden', 'recycle-sort', 'save-energy', 'aula-equipada', 'veredicto-justo', 'movilidad-sostenible'];
+        this.gameSequence = [
+            'veredicto-justo', 'traffic-control', 'super-farmer', 'factory-rush', 'supply-drop' , 'eco-run', 'sea-hook', 'sustainable-garden', 'recycle-sort', 
+            'save-energy', 'aula-equipada', 'movilidad-sostenible'
+        ];
         this.currentGameIndex = 0;
 
         // Bind methods
@@ -143,6 +146,22 @@ export class GameManager {
                 case 'movilidad-sostenible':
                     const { MovilidadSostenibleGame } = await import('./microgames/movilidad-sostenible.js');
                     GameClass = MovilidadSostenibleGame;
+                    break;
+                case 'supply-drop':
+                    const { SupplyDropGame } = await import('./microgames/supply-drop.js');
+                    GameClass = SupplyDropGame;
+                    break;
+                case 'super-farmer':
+                    const { SuperFarmerGame } = await import('./microgames/super-farmer.js');
+                    GameClass = SuperFarmerGame;
+                    break;
+                case 'factory-rush':
+                    const { FactoryRushGame } = await import('./microgames/factory-rush.js');
+                    GameClass = FactoryRushGame;
+                    break;
+                case 'traffic-control':
+                    const { TrafficControlGame } = await import('./microgames/traffic-control.js');
+                    GameClass = TrafficControlGame;
                     break;
             }
         } catch (e) {
