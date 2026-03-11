@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doc: Save Energy</title>
+    <link rel="shortcut icon" href="../../../img/logo.png" type="image/x-icon">
+    <link rel="stylesheet" href="../../../css/style.css">
+    <style>
+        .docs-container { max-width: 1000px; margin: 40px auto; padding: 20px; background: rgba(255, 255, 255, 0.05); border-radius: 15px; backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .docs-section { margin-bottom: 40px; padding-bottom: 20px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+        .docs-section h2 { color: var(--color-principal-lighter); margin-bottom: 20px; font-size: 2em; }
+        .docs-section h3, .docs-section h4 { color: var(--color-principal); margin-top: 20px; margin-bottom: 10px; }
+        .docs-section p, .docs-section li { line-height: 1.6; margin-bottom: 10px; font-size: 1.1em; }
+        .docs-section ul { margin-left: 20px; margin-bottom: 20px; }
+        .code-block { background: #1e1e1e; color: #d4d4d4; padding: 15px; border-radius: 8px; font-family: monospace; overflow-x: auto; margin: 15px 0; border: 1px solid #333; }
+        .back-link { display: inline-block; padding: 10px 20px; background: var(--color-principal); color: white; text-decoration: none; border-radius: 5px; margin-bottom: 20px; font-weight: bold; }
+        .back-link:hover { background: var(--color-principal-lighter); }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="../../../index.html" style="text-decoration: none;">
+            <div class="logo"><img src="../../../img/logo.png" alt="Logo" width="50px"><h1>MICRO<span style="color: var(--color-principal-lighter)">ODS</span></h1></div>
+        </a>
+    </header>
+    <main>
+        <div class="docs-container">
+            <a href="../docs.html" class="back-link">← Volver al Índice</a>
+            <h1 style="text-align: center; font-size: 2.5em;">Save Energy</h1>
+            <p style="text-align: center; color: #aaa;">Documentación Técnica</p>
+
+            <section class="docs-section">
+                <h2>1. Ficha Técnica</h2>
+                <ul>
+                    <li><strong>Nombre:</strong> Save Energy</li>
+                    <li><strong>ODS:</strong> ODS 7 - Energía Asequible y No Contaminante</li>
+                    <li><strong>Objetivo:</strong> Reaccionar rápido tocando los electrodomésticos o bombillas que se enciendan para apagarlos. Mantener el consumo de energía bajo hasta que acabe el tiempo de supervivencia.</li>
+                </ul>
+            </section>
+
+            <section class="docs-section">
+                <h2>2. Mecánica y Flujo de Juego</h2>
+                <p>Se inspira en el género clásico "Whack-A-Mole" pero invirtiendo la perspectiva: no hay que atrapar algo activo, sino silenciarlo/apagarlo para preservar la paz ambiental de los recursos.</p>
+                <ol>
+                    <li>Aparece un Canvas o Grid pre-poblado con un N número de dispositivos. Todos arrancan apagados (Oscurecidos o clases de estilo inactivas CSS).</li>
+                    <li>Variables de entorno temporales escogen 1 o 2 dispositivos y varían su <code>element.classList</code> a encendido (brillantes).</li>
+                    <li>El jugador hace clic y desactiva el nodo a su estado neutro original apagado.</li>
+                    <li>Si los ignora, el medidor virtual de KW/h sube, provocando fallo.</li>
+                </ol>
+            </section>
+
+            <section class="docs-section">
+                <h2>3. Lógica de Programación</h2>
+                <p>Depende pesadamente en las propiedades de mutabilidad de estado de Elementos (On/Off Flags) y no tanto en motor físico complejo.</p>
+
+                <h3>El Array del Grid</h3>
+                <div class="code-block">
+this.devices = [ {id: 1, elem: div1, on: false}, {id: 2, elem: div2, on: false} ];
+function turnRandomOn() {
+    let offDevices = this.devices.filter(d => !d.on);
+    if(offDevices.length > 0) { ... set on to true ... }
+}
+                </div>
+                <p>El ritmo de activaciones utiliza un <code>spawnInterval = setInterval(turnRandomOn, Rate)</code>. El Rate de encendidos decrece conforme los niveles crecen, haciendo inmanejable tener todo apagado para el jugador.</p>
+
+                <h3>La Barra Roja vs Verde de penalización</h3>
+                <p>Tiene un medidor global que comprueba en el loop secundario la cantidad de aparatos con flag true. Por cada segundo que un número "excesivo" de aparatos pasa encendido, la barra general decrece.</p>
+            </section>
+
+            <section class="docs-section">
+                <h2>4. Sistema de Victoria/Derrota</h2>
+                <p>Sobrescribe la definición clásica de BaseGame <code>handleTimeout()</code> de la siguiente forma:</p>
+
+                <ul>
+                    <li><strong>Victoria:</strong> El jugador llega a <code>this.timeLeft <= 0</code> sin que su medidor de energía/barras de frustración llegase a 0 en cualquier momento de la partida.</li>
+                    <li><strong>Derrota:</strong> Agotar el medidor (Ejemplo, 4 o más electrodomésticos duran 3 segundos enteros conectados a la red desbordando los Watios).</li>
+                </ul>
+            </section>
+        </div>
+    </main>
+    <footer>
+        <div class="grid"><div class="logo"><img src="../../../img/logo.png" width="50px"><p>MICRO<span style="color: var(--color-principal)">ODS</span><br></p></div></div>
+    </footer>
+</body>
+</html>
