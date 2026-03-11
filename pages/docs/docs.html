@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentación Técnica - Microjuegos</title>
+    <link rel="shortcut icon" href="../../img/logo.png" type="image/x-icon">
+    <link rel="stylesheet" href="../../css/style.css">
+    <style>
+        .docs-container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .docs-section {
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .docs-section:last-child {
+            border-bottom: none;
+        }
+
+        .docs-section h2 {
+            color: var(--color-principal-lighter);
+            margin-bottom: 20px;
+            font-size: 2.2em;
+        }
+
+        .docs-section h3 {
+            color: var(--color-principal);
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+
+        .docs-section p {
+            line-height: 1.8;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .docs-section ul {
+            margin-left: 20px;
+            margin-bottom: 20px;
+        }
+
+        .docs-section li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+
+        .code-block {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: monospace;
+            overflow-x: auto;
+            margin: 15px 0;
+            border: 1px solid #333;
+        }
+
+        .microgames-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .microgame-card {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--color-principal);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.2s, background 0.2s;
+            text-decoration: none;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 120px;
+        }
+
+        .microgame-card:hover {
+            transform: translateY(-5px);
+            background: rgba(var(--color-principal-rgb), 0.2);
+        }
+
+        .microgame-card h4 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: var(--color-principal-lighter);
+        }
+
+        .microgame-card span {
+            font-size: 0.9rem;
+            color: #ccc;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <a href="../../index.html" style="text-decoration: none;">
+            <div class="logo">
+                <img src="../../img/logo.png" alt="Logo" width="50px">
+                <h1>MICRO<span style="color: var(--color-principal-lighter)">ODS</span></h1>
+            </div>
+        </a>
+        <nav>
+            <li><a href="../../index.html">Inicio</a></li>
+            <li><a href="../marcador.html">Marcador</a></li>
+            <li><a href="../about-us.html">Sobre Nosotros</a></li>
+        </nav>
+    </header>
+
+    <main>
+        <div class="docs-container">
+            <h1 style="text-align: center; font-size: 3em; margin-bottom: 10px;">Documentación del Proyecto</h1>
+            <p style="text-align: center; color: #aaa; margin-bottom: 50px;">Arquitectura técnica, lógica y manuales de implementación</p>
+
+            <section class="docs-section">
+                <h2>1. Introducción al proyecto</h2>
+                <p>
+                    <strong>MICROODS</strong> es una plataforma web educativa diseñada para concienciar sobre los Objetivos de Desarrollo Sostenible (ODS) de las Naciones Unidas a través de la gamificación.
+                </p>
+                <p>
+                    El objetivo principal es acercar los ODS al público general, especialmente a los jóvenes, utilizando mecánicas de juego rápidas y directas que transmitan un mensaje claro de sostenibilidad en menos de 15 segundos por partida.
+                </p>
+            </section>
+
+            <section class="docs-section">
+                <h2>2. Concepto del proyecto</h2>
+                <p>
+                    El diseño de la plataforma toma como inspiración los juegos tipo <strong>Arcade rápidos</strong> y minijuegos <em>WarioWare</em>. Los microjuegos son experiencias flash (cortas, de entre 6 a 20 segundos) con mecánicas extremadamente simples que el jugador debe entender intuitivamente de un vistazo. 
+                </p>
+                <p>
+                    Cada vez que se completa un microjuego, la dificultad y la velocidad se incrementan ligeramente, probando los reflejos, la capacidad cognitiva y la retención del conocimiento sobre desarrollo sostenible por parte del usuario.
+                </p>
+            </section>
+
+            <section class="docs-section">
+                <h2>3. Arquitectura del Proyecto</h2>
+                <p>La arquitectura sigue principios básicos del desarrollo Front-end web (Vanilla):</p>
+                <ul>
+                    <li><strong>HTML5 / CSS3:</strong> Para la estructura semántica y la interfaz de usuario (UI), priorizando flexbox, CSS Grid y animaciones CSS (keyframes) para una experiencia fluida sin dependencias externas pesadas.</li>
+                    <li><strong>JavaScript (ES Modules):</strong> La lógica pesada corre sobre JS en modelo orientado a objetos (Clases). Usamos la separación modular (`export` e `import`) para mantener el código limpio y escalable.</li>
+                    <li><strong>DOM (Document Object Model):</strong> En lugar de usar Canvas API o WebGL sistemáticamente, la mayoría de juegos iteran y reposicionan nodos en el DOM, lo cual facilita la accesibilidad y depuración para interfaces UI sencillas.</li>
+                    <li><strong>Base de Datos (Firebase Firestore):</strong> Integración BaaS (Backend as a Service) sin servidor para guardar las puntuaciones globales de forma persistente.</li>
+                </ul>
+            </section>
+
+            <section class="docs-section">
+                <h2>4. Estructura de Carpetas</h2>
+                <div class="code-block">
+/MICROODS
+ ├── css/                # Archivos de estilos (Globales, Arcade, Animaciones)
+ ├── img/                # Assets gráficos, iconos y fondos
+ ├── js/
+ │   ├── microgames/     # Clases individuales de cada juego instanciables
+ │   ├── game-manager.js # Controlador del bucle de juego Arcade
+ │   └── firebase.js     # Configuración y servicios de BBDD
+ ├── pages/
+ │   ├── docs/           # [Tú estás aquí] Documentación del código
+ │   │   └── microgames/ # Documentación manual de lógica individual
+ │   ├── microgames/     # Vistas HTML (Tutoriales, Modo Arcade)
+ │   └── marcador.html   # Vista Leaderboard
+ └── index.html          # Landing page principal
+                </div>
+            </section>
+
+            <section class="docs-section">
+                <h2>5. Sistema de Microjuegos (El Bucle Arcade)</h2>
+                <h3>GameManager (`js/game-manager.js`)</h3>
+                <p>
+                    Actúa como orquestador central que rota aleatoriamente el arsenal de microjuegos disponibles.
+                </p>
+                <ul>
+                    <li><strong>Vidas y Puntuación:</strong> El jugador comienza con 3 vidas. Cada victoria suma +1 al score global, y cada derrota resta una vida. Al llegar a 0, termina y pasas al Game Over.</li>
+                    <li><strong>Dificultad Progresiva:</strong> Cada 3 juegos superados, la variable `this.level` (interna) se incrementa, acortando temporizadores, subiendo la velocidad de objetos y exigiendo puntuaciones meta (`targetObjects`) mayores.</li>
+                    <li><strong>Clase BaseGame (`base-game.js`):</strong> Plantilla núcleo de la que heredan todos. Estipula interfaces universales de ciclo de vida: `setupGame()`, `startTimer()`, `update()`, y `cleanup()`.</li>
+                </ul>
+            </section>
+
+            <section class="docs-section">
+                <h2>6. Sistema de Leaderboard (Firebase)</h2>
+                <p>
+                    Para persistencia de datos utilizamos las librerías CDN de Firebase Firestore versión 9/Modular.
+                </p>
+                <div class="code-block">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-app.js";
+import { getFirestore, collection, addDoc, getDocs, orderBy, query, limit } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-firestore.js";
+                </div>
+                <ul>
+                    <li><strong>`saveScore(playerName, score)`:</strong> Método asíncrono que almacena un nuevo documento con la fecha (`timestamp`) y puntaje. Permite a los usuarios competir por el top 10 mundial.</li>
+                    <li><strong>`getLeaderboard()`:</strong> Genera una consulta (Query) ordenada por score descendente con un límite de 10 nodos. Rellena la tabla dinámica de <code>marcador.html</code>.</li>
+                </ul>
+            </section>
+
+            <section class="docs-section">
+                <h2>7. Tecnologías Utilizadas</h2>
+                <ul>
+                    <li>🖥️ HTML5 y CSS3 (Standard)</li>
+                    <li>⚡ JS ES6+ Vainilla (OOP, Fetch API, DOM API, RequestAnimationFrame)</li>
+                    <li>🔥 Firebase (Firestore Database)</li>
+                    <li>🚀 GitHub Pages (Hospedaje de ficheros estáticos CI/CD automatizado)</li>
+                </ul>
+            </section>
+
+            <section class="docs-section">
+                <h2>Documentación técnica individual por Microjuego</h2>
+                <p>Selecciona un microjuego para ver su lógica de programación, mecánicas técnicas, uso de eventos y detección de colisiones:</p>
+                <div class="microgames-grid">
+                    <a href="./microgames/aula-equipada.html" class="microgame-card">
+                        <h4>Aula Equipada</h4>
+                        <span>ODS 4: Educación</span>
+                    </a>
+                    <a href="./microgames/eco-run.html" class="microgame-card">
+                        <h4>Eco Run</h4>
+                        <span>ODS 14: Vida Submarina</span>
+                    </a>
+                    <a href="./microgames/factory-rush.html" class="microgame-card">
+                        <h4>Factory Rush</h4>
+                        <span>ODS 8: Trabajo Decente</span>
+                    </a>
+                    <a href="./microgames/movilidad-sostenible.html" class="microgame-card">
+                        <h4>Movilidad Sostenible</h4>
+                        <span>ODS 11: Ciudades</span>
+                    </a>
+                    <a href="./microgames/recycle-sort.html" class="microgame-card">
+                        <h4>Recycle Sort</h4>
+                        <span>ODS 12: Producción Sostenible</span>
+                    </a>
+                    <a href="./microgames/save-energy.html" class="microgame-card">
+                        <h4>Save Energy</h4>
+                        <span>ODS 7: Energía Asequible</span>
+                    </a>
+                    <a href="./microgames/sea-hook.html" class="microgame-card">
+                        <h4>Sea Hook</h4>
+                        <span>ODS 14: Vida Submarina</span>
+                    </a>
+                    <a href="./microgames/super-farmer.html" class="microgame-card">
+                        <h4>Super Farmer</h4>
+                        <span>ODS 2: Hambre Cero</span>
+                    </a>
+                    <a href="./microgames/supply-drop.html" class="microgame-card">
+                        <h4>Supply Drop</h4>
+                        <span>ODS 1: Fin de la Pobreza</span>
+                    </a>
+                    <a href="./microgames/sustainable-garden.html" class="microgame-card">
+                        <h4>Sustainable Garden</h4>
+                        <span>ODS 15: Ecosistemas Terrestres</span>
+                    </a>
+                    <a href="./microgames/traffic-control.html" class="microgame-card">
+                        <h4>Traffic Control</h4>
+                        <span>ODS 11: Ciudades Sostenibles</span>
+                    </a>
+                    <a href="./microgames/veredicto-justo.html" class="microgame-card">
+                        <h4>Veredicto Justo</h4>
+                        <span>ODS 16: Paz y Justicia</span>
+                    </a>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <div class="grid">
+            <div class="logo">
+                <img src="../../img/logo.png" alt="Logo" width="50px">
+                <p>MICRO<span style="color: var(--color-principal)">ODS</span> <br> <span class="author">Álvaro Espinosa
+                        Montesinos & Niranjan Sharma</span></p>
+            </div>
+            <div class="links">
+                <ul>
+                    <li><a href="https://github.com/users/espinosa-dev/projects/5" target="_blank">Proyecto GitHub</a>
+                    </li>
+                    <li><a href="https://github.com/espinosa-dev/MICROODS" target="_blank">Repositorio</a></li>
+                </ul>
+                <ul>
+                    <li><a href="../about-us.html">Sobre Nosotros</a></li>
+                    <li><a href="./docs.html">Documentación</a></li>
+                </ul>
+            </div>
+            <div class="links">
+                <a href="https://www.un.org/sustainabledevelopment/es/sustainable-development-goals/"><img
+                        src="../../img/obs-logo.png" alt="Objetivos de Desarrollo Sostenible" width="100px"
+                        style="margin-left: 200px;"></a>
+            </div>
+        </div>
+    </footer>
+    <script src="../../js/header.js"></script>
+    <script type="module" src="../../js/temp.js"></script>
+</body>
+
+</html>
