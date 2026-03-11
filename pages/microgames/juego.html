@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,19 +8,22 @@
     <link rel="stylesheet" href="../../css/games.css">
     <link rel="shortcut icon" href="../../img/logo.png" type="image/x-icon">
 </head>
+
 <body>
     <div class="arcade-cabinet">
         <header class="arcade-header">
-            <div class="marquee">
-                <span class="bulb"></span>
-                <div class="title-container">
-                    <img src="../../img/logo.png" alt="Logo" class="arcade-logo">
-                    <h1>MICRO<span class="neon-text">ODS</span></h1>
+            <a style="text-decoration: none;" href="../../index.html">
+                <div class="marquee">
+                    <span class="bulb"></span>
+                    <div class="title-container">
+                        <img src="../../img/logo.png" alt="Logo" class="arcade-logo">
+                        <h1>MICRO<span class="neon-text">ODS</span></h1>
+                    </div>
+                    <span class="bulb"></span>
                 </div>
-                <span class="bulb"></span>
-            </div>
+            </a>
         </header>
-        
+
         <main class="arcade-body">
             <div class="screen-bezel">
                 <div class="game-info-bar">
@@ -29,7 +33,7 @@
                     <!-- Game Content via JS -->
                 </div>
                 <div class="timer-container-arcade">
-                     <div id="gameTimerBar" class="timer-bar"></div>
+                    <div id="gameTimerBar" class="timer-bar"></div>
                 </div>
             </div>
             <div class="arcade-controls-deco">
@@ -43,8 +47,8 @@
     </div>
     <script type="module">
         import { GameManager } from '../../js/game-manager.js';
-        
-        window.onerror = function(message, source, lineno, colno, error) {
+
+        window.onerror = function (message, source, lineno, colno, error) {
             const errorDiv = document.createElement('div');
             errorDiv.style.color = 'red';
             errorDiv.style.background = 'white';
@@ -67,11 +71,10 @@
             } catch (e) {
                 console.error("Initialization error:", e);
                 const ventana = document.querySelector('.ventana');
-                if(ventana) ventana.innerHTML = `<p style="color:red; padding:20px;">Error al iniciar el juego: ${e.message}</p>`;
+                if (ventana) ventana.innerHTML = `<p style="color:red; padding:20px;">Error al iniciar el juego: ${e.message}</p>`;
             }
         });
     </script>
 </body>
+
 </html>
-
-
