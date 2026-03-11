@@ -11,17 +11,17 @@ export class VeredictoJustoGame extends BaseGame {
         if (this.level === 1) { // Fácil
             this.justiciaCount = 3;
             this.corrupcionCount = 0;
-            this.speedMultiplier = 1;
+            this.speedMultiplier = 0.5;
             this.iconSize = 64;
         } else if (this.level === 2) { // Normal
             this.justiciaCount = 5;
             this.corrupcionCount = 2;
-            this.speedMultiplier = 1.2;
+            this.speedMultiplier = 0.5;
             this.iconSize = 64;
         } else { // Difícil (nivel 3 o superior)
             this.justiciaCount = 7;
             this.corrupcionCount = 4;
-            this.speedMultiplier = 1.5;
+            this.speedMultiplier = 0.55;
             this.iconSize = 48; // Iconos más pequeños
         }
     }
