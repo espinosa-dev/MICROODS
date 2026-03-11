@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doc: Recycle Sort</title>
+    <link rel="shortcut icon" href="../../../img/logo.png" type="image/x-icon">
+    <link rel="stylesheet" href="../../../css/style.css">
+    <style>
+        .docs-container { max-width: 1000px; margin: 40px auto; padding: 20px; background: rgba(255, 255, 255, 0.05); border-radius: 15px; backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .docs-section { margin-bottom: 40px; padding-bottom: 20px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+        .docs-section h2 { color: var(--color-principal-lighter); margin-bottom: 20px; font-size: 2em; }
+        .docs-section h3, .docs-section h4 { color: var(--color-principal); margin-top: 20px; margin-bottom: 10px; }
+        .docs-section p, .docs-section li { line-height: 1.6; margin-bottom: 10px; font-size: 1.1em; }
+        .docs-section ul { margin-left: 20px; margin-bottom: 20px; }
+        .code-block { background: #1e1e1e; color: #d4d4d4; padding: 15px; border-radius: 8px; font-family: monospace; overflow-x: auto; margin: 15px 0; border: 1px solid #333; }
+        .back-link { display: inline-block; padding: 10px 20px; background: var(--color-principal); color: white; text-decoration: none; border-radius: 5px; margin-bottom: 20px; font-weight: bold; }
+        .back-link:hover { background: var(--color-principal-lighter); }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="../../../index.html" style="text-decoration: none;">
+            <div class="logo"><img src="../../../img/logo.png" alt="Logo" width="50px"><h1>MICRO<span style="color: var(--color-principal-lighter)">ODS</span></h1></div>
+        </a>
+    </header>
+    <main>
+        <div class="docs-container">
+            <a href="../docs.html" class="back-link">← Volver al Índice</a>
+            <h1 style="text-align: center; font-size: 2.5em;">Recycle Sort</h1>
+            <p style="text-align: center; color: #aaa;">Documentación Técnica</p>
+
+            <section class="docs-section">
+                <h2>1. Ficha Técnica</h2>
+                <ul>
+                    <li><strong>Nombre:</strong> Recycle Sort</li>
+                    <li><strong>ODS:</strong> ODS 12 - Producción y Consumo Responsable</li>
+                    <li><strong>Objetivo:</strong> Arrastrar los residuos que caen continuamente hacia los cubos de reciclaje del color correcto antes de que toquen el suelo.</li>
+                </ul>
+            </section>
+
+            <section class="docs-section">
+                <h2>2. Mecánica y Flujo de Juego</h2>
+                <p>Fusiona el concepto de <strong>Sorting</strong> educacional (clasificar pares) con la velocidad frenética de la gravedad que acelera items.</p>
+                <ol>
+                    <li>Múltiples cubetas de reciclaje (Papel, Vidrio, Plástico, etc.) están fijas en la base inferior.</li>
+                    <li>Nodos marcados con clases específicas (ej: <code>'trash-paper'</code>) spawnean arriba en posiciones X aleatorias.</li>
+                    <li>Los objetos ganan Y interpolada en bucle hasta que tocan un borde inferior.</li>
+                    <li>El jugador pincha un ítem y usa <code>drag API</code> llevándolo a una papelera de reciclaje y saltándose el proceso gravitatorio.</li>
+                </ol>
+            </section>
+
+            <section class="docs-section">
+                <h2>3. Lógica de Programación</h2>
+                <p>Las iteraciones del Engine deben chequear si un objeto basura está siendo 'sostenido' (<code>dragging</code>) para detener momentáneamente sus cálculos vectoriales de fuerza de gravedad.</p>
+                
+                <h3>El sistema de Validación (Mappings)</h3>
+                <p>Utiliza colecciones de strings simples para empatarlas o usar diccionarios Map object.</p>
+                <div class="code-block">
+const BINS = { paper: ['newspaper', 'cardboard'], glass: ['bottle', 'jar'] };
+function isValid(trashData, targetBin) { ... }
+                </div>
+
+                <h3>Gravedad</h3>
+                <p>Definida en <code>this.fallSpeed</code> escalable basado en el nivel actual. <code>item.y += this.fallSpeed</code> corre infinitamente hasta despawnear visualmente al sobrepasar <code>100%</code> de altura del Parent.</p>
+            </section>
+
+            <section class="docs-section">
+                <h2>4. Sistema de Victoria/Derrota</h2>
+                <p><strong>Victoria:</strong> Clasificar con acierto una cantidad estipulada de ítems marcados por <code>this.targetTrash</code> dentro del límite de tiempo.</p>
+                <p><strong>Derrota:</strong> Cada ítem suelto equivocadamente (Drop en un cubo de otro color) se marca de rojo, desaparece y el juego resta un fallo permitido oculto. También penaliza el tiempo global general o desencadena derrota automática según el nivel.</p>
+            </section>
+
+            <section class="docs-section">
+                <h2>5. Consideraciones de Rendimiento</h2>
+                <p>Todos los intervalos y eventos asociados al drag and drop de objetos generados asíncronamente deben destruirse usando <code>element.remove()</code> en el proceso rutinario de Garbage Collection <code>cleanup()</code> predeterminado del <code>BaseGame</code> para evitar memory leaks.</p>
+            </section>
+        </div>
+    </main>
+    <footer>
+        <div class="grid"><div class="logo"><img src="../../../img/logo.png" width="50px"><p>MICRO<span style="color: var(--color-principal)">ODS</span><br></p></div></div>
+    </footer>
+</body>
+</html>
