@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doc: Movilidad Sostenible</title>
+    <link rel="shortcut icon" href="../../../img/logo.png" type="image/x-icon">
+    <link rel="stylesheet" href="../../../css/style.css">
+    <style>
+        .docs-container { max-width: 1000px; margin: 40px auto; padding: 20px; background: rgba(255, 255, 255, 0.05); border-radius: 15px; backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .docs-section { margin-bottom: 40px; padding-bottom: 20px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+        .docs-section h2 { color: var(--color-principal-lighter); margin-bottom: 20px; font-size: 2em; }
+        .docs-section h3, .docs-section h4 { color: var(--color-principal); margin-top: 20px; margin-bottom: 10px; }
+        .docs-section p, .docs-section li { line-height: 1.6; margin-bottom: 10px; font-size: 1.1em; }
+        .docs-section ul { margin-left: 20px; margin-bottom: 20px; }
+        .code-block { background: #1e1e1e; color: #d4d4d4; padding: 15px; border-radius: 8px; font-family: monospace; overflow-x: auto; margin: 15px 0; border: 1px solid #333; }
+        .back-link { display: inline-block; padding: 10px 20px; background: var(--color-principal); color: white; text-decoration: none; border-radius: 5px; margin-bottom: 20px; font-weight: bold; }
+        .back-link:hover { background: var(--color-principal-lighter); }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="../../../index.html" style="text-decoration: none;">
+            <div class="logo"><img src="../../../img/logo.png" alt="Logo" width="50px"><h1>MICRO<span style="color: var(--color-principal-lighter)">ODS</span></h1></div>
+        </a>
+    </header>
+    <main>
+        <div class="docs-container">
+            <a href="../docs.html" class="back-link">← Volver al Índice</a>
+            <h1 style="text-align: center; font-size: 2.5em;">Movilidad Sostenible</h1>
+            <p style="text-align: center; color: #aaa;">Documentación Técnica</p>
+
+            <section class="docs-section">
+                <h2>1. Ficha Técnica</h2>
+                <ul>
+                    <li><strong>Nombre:</strong> Movilidad Sostenible</li>
+                    <li><strong>ODS:</strong> ODS 11 - Ciudades / ODS 17 - Alianzas</li>
+                    <li><strong>Objetivo:</strong> Mover una serie de vehículos manual o libremente al área "segura" (carril bici o similar) sin colisionar contra obstáculos en movimiento continuo.</li>
+                </ul>
+            </section>
+
+            <section class="docs-section">
+                <h2>2. Mecánica y Flujo de Juego</h2>
+                <p>Usa coordenadas libres (absolutas en <code>px</code> o <code>%</code>) del ratón en lugar de Snap al Drag and Drop HTML5. Es un cruce de simulación de física Top-Down y esquivar proyectiles.</p>
+                <ol>
+                    <li>Aparece una "Zona Segura" visual en el contenedor.</li>
+                    <li>Vehículos interactivos (DOM elements) parpadean en el borde opuesto indicando que es urgente moverlos.</li>
+                    <li>Obstáculos independientes cruzan la pantalla horizontalmente interpolando X.</li>
+                    <li>El jugador pulsa clic primario en un vehículo y arrastra libremente evadiendo a los obstáculos hasta el área verde.</li>
+                </ol>
+            </section>
+
+            <section class="docs-section">
+                <h2>3. Lógica de Programación</h2>
+                <p>Es uno de los minijuegos mecánicamente más sofisticados ya que emula un sistema 2D completo.</p>
+
+                <h3>Matemáticas y Eventos Drag Libre</h3>
+                <div class="code-block">
+document.addEventListener('mousedown', (e) => { ... });
+document.addEventListener('mousemove', (e) => { 
+    if(!this.isDragging) return;
+    this.car.x = (e.clientX - boundRect.left); 
+    this.car.y = (e.clientY - boundRect.top);
+});
+document.addEventListener('mouseup', (e) => { ... });
+                </div>
+                <p>Las coordenadas se convierten utilizando <code>Element.getBoundingClientRect()</code> para normalizar la posición del ratón respecto al Canvas virtual CSS.</p>
+
+                <h3>Motor de Colisiones</h3>
+                <p>Implementa la técnica AABB (Axis-Aligned Bounding Box Intersection) comprobando que dos rectángulos abstractos solapan en el frame actual mediante el método <code>update()</code> que corre en bucle a al menos 60FPS.</p>
+            </section>
+
+            <section class="docs-section">
+                <h2>4. Sistema de Victoria/Derrota</h2>
+                <p><strong>Victoria:</strong> En el evento <code>mouseup</code>, comprueba si el vehículo soltado está dentro de los márgenes matemáticos de la "Safe Zone" definida. Suma y procede al siguiente si restan.</p>
+                <p><strong>Derrota:</strong> 1 simple colisión detectada por AABB o agotar el temporizador activa un Game Over.</p>
+            </section>
+        </div>
+    </main>
+    <footer>
+        <div class="grid"><div class="logo"><img src="../../../img/logo.png" width="50px"><p>MICRO<span style="color: var(--color-principal)">ODS</span><br></p></div></div>
+    </footer>
+</body>
+</html>
