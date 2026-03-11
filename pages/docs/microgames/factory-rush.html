@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doc: Factory Rush</title>
+    <link rel="shortcut icon" href="../../../img/logo.png" type="image/x-icon">
+    <link rel="stylesheet" href="../../../css/style.css">
+    <style>
+        .docs-container { max-width: 1000px; margin: 40px auto; padding: 20px; background: rgba(255, 255, 255, 0.05); border-radius: 15px; backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .docs-section { margin-bottom: 40px; padding-bottom: 20px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+        .docs-section h2 { color: var(--color-principal-lighter); margin-bottom: 20px; font-size: 2em; }
+        .docs-section h3, .docs-section h4 { color: var(--color-principal); margin-top: 20px; margin-bottom: 10px; }
+        .docs-section p, .docs-section li { line-height: 1.6; margin-bottom: 10px; font-size: 1.1em; }
+        .docs-section ul { margin-left: 20px; margin-bottom: 20px; }
+        .code-block { background: #1e1e1e; color: #d4d4d4; padding: 15px; border-radius: 8px; font-family: monospace; overflow-x: auto; margin: 15px 0; border: 1px solid #333; }
+        .back-link { display: inline-block; padding: 10px 20px; background: var(--color-principal); color: white; text-decoration: none; border-radius: 5px; margin-bottom: 20px; font-weight: bold; }
+        .back-link:hover { background: var(--color-principal-lighter); }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="../../../index.html" style="text-decoration: none;">
+            <div class="logo"><img src="../../../img/logo.png" alt="Logo" width="50px"><h1>MICRO<span style="color: var(--color-principal-lighter)">ODS</span></h1></div>
+        </a>
+    </header>
+    <main>
+        <div class="docs-container">
+            <a href="../docs.html" class="back-link">← Volver al Índice</a>
+            <h1 style="text-align: center; font-size: 2.5em;">Factory Rush</h1>
+            <p style="text-align: center; color: #aaa;">Documentación Técnica</p>
+
+            <section class="docs-section">
+                <h2>1. Ficha Técnica</h2>
+                <ul>
+                    <li><strong>Nombre:</strong> Factory Rush</li>
+                    <li><strong>ODS:</strong> ODS 8 - Trabajo Decente y Crecimiento Económico</li>
+                    <li><strong>Objetivo:</strong> Redirigir la cinta transportadora hacia la izquierda o derecha para guiar a los trabajadores a fábricas sostenibles y protegerlos de la explotación laboral.</li>
+                </ul>
+            </section>
+
+            <section class="docs-section">
+                <h2>2. Mecánica y Flujo de Juego</h2>
+                <p>El jugador controla un divisor de cinta o palanca (switch) central pulsándolo con clic. Las fábricas sostenibles vs explotadoras alternan sus lados aleatoriamente para requerir atención constante.</p>
+                <ol>
+                    <li>Trabajadores (DOM nodes) aparecen arriba e interpolan la propiedad `top` hacia abajo simulando caída libre.</li>
+                    <li>En el centro (Y: 50%), el trabajador lee el estado del switch (<code>'left'</code> o <code>'right'</code>).</li>
+                    <li>El trabajador cambia su vector CSS <code>left</code> para dirigirse a una banda secundaria.</li>
+                    <li>Al llegar al final validamos si esa fábrica era la "buena".</li>
+                </ol>
+            </section>
+
+            <section class="docs-section">
+                <h2>3. Lógica de Programación</h2>
+                <p>Este sistema depende altamente del método <code>update()</code> atado al bucle global <code>requestAnimationFrame</code>. Todos los objetos en pantalla son Array de diccionarios que modelan su estado matemático y el puntero hacia su DOM <code>element</code>.</p>
+
+                <h3>Variables Importantes</h3>
+                <div class="code-block">
+this.conveyorDirection = 'left';  // Estado binario del switch
+this.goodFactorySide = 'left';    // Variable que muta cada X tiempo con setInterval
+this.workers = [];                // Tracking object list
+this.targetCount = 5;             // Condiciones
+                </div>
+
+                <h3>Desviadores Matemáticos</h3>
+                <p>El bucle comprueba constantemente <code>if (worker.y > 45 && !worker.diverted)</code> para saber en qué momento el trabajador toca el pivote, le inyecta la dirección actual del switch y flaggea <code>worker.diverted = true</code>.</p>
+            </section>
+
+            <section class="docs-section">
+                <h2>4. Sistema de Victoria/Derrota</h2>
+                <p><strong>Victoria:</strong> Cuando el trabajador cruza al final de su eje (ej: <code>worker.y > 90</code>), se compara <code>worker.divertedDir === this.goodFactorySide</code>. De ser cierto, el contador sube.</p>
+                <p><strong>Derrota:</strong> 1 solo fallo (enviar al trabajador a la fábrica mala) dispara <code>triggerCrash()</code>, deteniendo intervalos, tiñendo el background de rojo con CSS classes y llamando a <code>this.finish(false)</code>.</p>
+            </section>
+
+            <section class="docs-section">
+                <h2>5. Mejoras Implementadas Históricamente</h2>
+                <p>Las iteraciones del equipo redujeron drásticamente la velocidad base de los trabajadores (de 0.8 a 0.3 interpolaciones) para evitar la frustración ("Tuning Gameplay") y se incrementaron indicadores visuales robustos de colores verdes y rojos usando la propiedad <code>box-shadow</code>.</p>
+            </section>
+        </div>
+    </main>
+    <footer>
+        <div class="grid"><div class="logo"><img src="../../../img/logo.png" width="50px"><p>MICRO<span style="color: var(--color-principal)">ODS</span><br></p></div></div>
+    </footer>
+</body>
+</html>
