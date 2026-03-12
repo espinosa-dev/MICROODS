@@ -1,12 +1,12 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { 
-  getFirestore, 
-  collection, 
-  addDoc, 
-  getDocs, 
-  query, 
-  orderBy, 
-  limit 
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  getDocs,
+  query,
+  orderBy,
+  limit
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -23,12 +23,14 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 export async function saveScore(name, score, level) {
-  await addDoc(collection(db, "leaderboard"), {
-    name,
-    score,
-    level,
-    date: new Date()
-  });
+  if (name != "ivan") {
+    await addDoc(collection(db, "leaderboard"), {
+      name,
+      score,
+      level,
+      date: new Date()
+    });
+  }
 }
 
 export async function getLeaderboard() {
