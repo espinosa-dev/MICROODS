@@ -23,7 +23,7 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 export async function saveScore(name, score, level) {
-  if (name != "ivan") {
+  if (!name.includes("ivan")) {
     await addDoc(collection(db, "leaderboard"), {
       name,
       score,
