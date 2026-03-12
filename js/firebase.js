@@ -2,14 +2,12 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/fireba
 import {
   getFirestore,
   collection,
-  doc,
-  setDoc,
+  addDoc,
   getDocs,
   query,
   orderBy,
   limit
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyD5ikvHPK5Cih1NuOwyutlcQxN9PNrpr1E",
@@ -23,22 +21,15 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const auth = getAuth(app);
 
 export async function saveScore(name, score, level) {
-  try {
-    const userCredential = await signInAnonymously(auth);
-    const user = userCredential.user;
-
-    await setDoc(doc(db, "leaderboard", user.uid), {
+  if (!name.includes("ivan")) {
+    await addDoc(collection(db, "leaderboard"), {
       name,
       score,
       level,
-      date: new Date().toISOString()
+      date: new Date()
     });
-    console.log("¡Puntuación guardada para " + name + "!");
-  } catch (error) {
-    console.error("Error:", error);
   }
 }
 
